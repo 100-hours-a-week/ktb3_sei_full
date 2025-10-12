@@ -51,8 +51,13 @@ public class UserService {
     }
 
     public User updateUser(Long id, String nickname, String profileImageUrl) {
-        if(nickname !=null && checkNicknameDuplicate(nickname)) {
-            throw new IllegalArgumentException("Nickname already exists!");
+        if(nickname !=null) {
+            User currentUser = userRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found!"));
+
+            if (!nickname.equals(currentUser.getNickname()) && checkNicknameDuplicate(nickname)) {
+                throw new IllegalArgumentException("Nickname already exists!");
+            }
         }
         return userRepository.update(id, nickname, profileImageUrl)
                 .orElseThrow(() -> new IllegalArgumentException("User not found!"));
@@ -74,4 +79,13 @@ public class UserService {
         user.setPassword(newPassword);
         return user;
     }
+
+    public User deleteUser(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found!"));
+        userRepository.delete(id);
+
+        return user;
+    }
+
 }

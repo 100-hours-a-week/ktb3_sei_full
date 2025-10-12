@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,8 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody User user) {
+    public ResponseEntity<Map<String ,Object>> signup(@RequestBody User user) {
+
 
         User createdUser = userService.register(
                 user.getEmail(),
@@ -50,7 +52,10 @@ public class UserController {
                 user.getNickname(),
                 user.getProfileImageUrl()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "signup_success");
+        response.put("user", createdUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
@@ -66,21 +71,40 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}/profile")
-    public ResponseEntity<User> updateUserProfile(@PathVariable Long userId, @RequestBody Map<String, Object> request){
+    public ResponseEntity<Map<String ,Object>> updateUserProfile(@PathVariable Long userId, @RequestBody Map<String, Object> request){
         String nickname = (String) request.get("nickname");
         String profileImageUrl = (String) request.get("profileImageUrl");
 
         User updatedUser = userService.updateUser(userId, nickname, profileImageUrl);
-        return ResponseEntity.ok(updatedUser);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "update_success");
+        response.put("user", updatedUser);
+        return ResponseEntity.ok(response);
 
     }
 
     @PatchMapping("/{userId}/password")
-    public ResponseEntity<User> updateUserPassword(@PathVariable Long userId, @RequestBody Map<String, String> request){
-        String newPassword = (String) request.get("newPassword");
-        String confirmPassword = (String) request.get("confirmPassword");
+    public ResponseEntity<Map<String ,Object>> updateUserPassword(@PathVariable Long userId, @RequestBody Map<String, String> request){
+        String newPassword = request.get("newPassword");
+        String confirmPassword = request.get("confirmPassword");
 
         User updatedUser = userService.updatePassword(userId, newPassword, confirmPassword);
-        return ResponseEntity.ok(updatedUser);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "update_success");
+        response.put("user", updatedUser);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable Long userId){
+        User deletedUser = userService.deleteUser(userId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "delete_success");
+        response.put("deletedUser", deletedUser);
+
+        return ResponseEntity.ok(response);
     }
 }
