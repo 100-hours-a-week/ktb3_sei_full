@@ -4,6 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -39,15 +42,36 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody User user) {
+    public ResponseEntity<User> signup(@RequestBody User user) {
 
-        userService.register(
+        User createdUser = userService.register(
                 user.getEmail(),
                 user.getPassword(),
                 user.getNickname(),
                 user.getProfileImageUrl()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers(){
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<User> getUserProfile(@RequestParam String email){
+        User user = userService.getUserByEmail(email);
+        return ResponseEntity.ok(user);
+    }
+
+    @PatchMapping("/{userId}/profile")
+    public ResponseEntity<User> updateUserProfile(@PathVariable Long userId, @RequestBody Map<String, Object> request){
+        String nickname = (String) request.get("nickname");
+        String profileImageUrl = (String) request.get("profileImageUrl");
+
+        User updatedUser = userService.updateUser(userId, nickname, profileImageUrl);
+        return ResponseEntity.ok(updatedUser);
+
+    }
 }

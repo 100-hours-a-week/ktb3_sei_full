@@ -42,5 +42,16 @@ public class UserRepository {
         users.clear();
         sequence = 0L;
     }
+
+    public Optional<User> update(Long id, String nickname, String profileImageUrl) {
+        User user = users.get(id);
+        if(user == null) return Optional.empty();
+
+        if(nickname != null  && !nickname.isBlank()) user.setNickname(nickname);
+        if(profileImageUrl != null && !nickname.isBlank()) user.setProfileImageUrl(profileImageUrl);
+
+        users.put(id, user);
+        return Optional.of(user);
+    }
 }
 
