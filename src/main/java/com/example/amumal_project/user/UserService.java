@@ -58,4 +58,20 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found!"));
 
     }
+
+    public User updatePassword(Long id, String newPassword, String confirmPassword) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found!"));
+
+        if(newPassword == null || confirmPassword == null || newPassword.isBlank() || confirmPassword.isBlank()) {
+            throw new IllegalArgumentException("Password or Confirm Password cannot be empty!");
+        }
+
+        if(!newPassword.equals(confirmPassword)) {
+            throw new IllegalArgumentException("Passwords do not match!");
+        }
+
+        user.setPassword(newPassword);
+        return user;
+    }
 }

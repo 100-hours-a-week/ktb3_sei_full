@@ -74,4 +74,13 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
 
     }
+
+    @PatchMapping("/{userId}/password")
+    public ResponseEntity<User> updateUserPassword(@PathVariable Long userId, @RequestBody Map<String, String> request){
+        String newPassword = (String) request.get("newPassword");
+        String confirmPassword = (String) request.get("confirmPassword");
+
+        User updatedUser = userService.updatePassword(userId, newPassword, confirmPassword);
+        return ResponseEntity.ok(updatedUser);
+    }
 }
