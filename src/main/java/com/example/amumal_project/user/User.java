@@ -1,10 +1,14 @@
 package com.example.amumal_project.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class User {
     private Long id;
     private String email;
     private String password;
     private String nickname;
+
+    @JsonProperty("profile_image")
     private String profileImageUrl;
 
     public User(){}

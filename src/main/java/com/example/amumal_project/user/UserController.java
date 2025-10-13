@@ -54,7 +54,7 @@ public class UserController {
         );
         Map<String, Object> response = new HashMap<>();
         response.put("message", "signup_success");
-        response.put("user", createdUser);
+        response.put("data", createdUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -79,7 +79,7 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "update_success");
-        response.put("user", updatedUser);
+        response.put("data", updatedUser);
         return ResponseEntity.ok(response);
 
     }
@@ -87,13 +87,12 @@ public class UserController {
     @PatchMapping("/{userId}/password")
     public ResponseEntity<Map<String ,Object>> updateUserPassword(@PathVariable Long userId, @RequestBody Map<String, String> request){
         String newPassword = request.get("newPassword");
-        String confirmPassword = request.get("confirmPassword");
 
-        User updatedUser = userService.updatePassword(userId, newPassword, confirmPassword);
+        userService.updatePassword(userId, newPassword);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "update_success");
-        response.put("user", updatedUser);
+        response.put("data", null);
         return ResponseEntity.ok(response);
     }
 
@@ -103,8 +102,24 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "delete_success");
-        response.put("deletedUser", deletedUser);
+        response.put("data", null);
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request){
+        String email = request.get("email");
+        String password = request.get("password");
+
+        User user = userService.login(email, password);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "login_success");
+        response.put("data", user);
+
+        return ResponseEntity.ok(response);
+    }
+
+
 }
