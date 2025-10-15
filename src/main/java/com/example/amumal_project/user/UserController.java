@@ -1,6 +1,8 @@
 package com.example.amumal_project.user;
 
+import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
+import com.example.amumal_project.common.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +29,10 @@ public class UserController {
         boolean exist = userService.checkEmailDuplicate(email);
 
         if(exist){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재히는 이메일입니다.");
         }
 
-        return ResponseEntity.ok("Email is available");
+        return ResponseEntity.ok("사용 가능한 이메일입니다.");
     }
 
     //닉네임 중복 확인
@@ -40,10 +42,10 @@ public class UserController {
         boolean exist = userService.checkNicknameDuplicate(nickname);
 
         if(exist){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nickname already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 닉네임입니다.");
         }
 
-        return ResponseEntity.ok("Nickname is available");
+        return ResponseEntity.ok("사용 가능한 닉네임입니다.");
     }
 
     //회원가입
@@ -93,7 +95,7 @@ public class UserController {
         User loginUser = (User) session.getAttribute("loginUser");
 
         if(loginUser == null){
-            throw new ResourceNotFoundException("현재 사용자를 찾을 수 없습니다.");
+            throw new ResourceNotFoundException("사용자를 찾을 수 없습니다.");
         }
         Map<String,Object> response = new HashMap<>();
         response.put("message", "profile_success");
@@ -108,7 +110,7 @@ public class UserController {
 
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null){
-            throw new ResourceNotFoundException("잘못된 접근입니다.");
+            throw new UnauthorizedException("잘못된 접근입니다.");
         }
 
         String nickname = (String) request.get("nickname");
@@ -131,7 +133,7 @@ public class UserController {
 
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null){
-            throw new ResourceNotFoundException("잘못된 접근입니다.");
+            throw new UnauthorizedException("잘못된 접근입니다.");
         }
 
         userService.updatePassword(loginUser.getId(), newPassword);
@@ -147,7 +149,7 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> deleteUser(HttpSession session){
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null){
-            throw new ResourceNotFoundException("잘못된 접근입니다.");
+            throw new UnauthorizedException("잘못된 접근입니다.");
         }
 
         User deletedUser = userService.deleteUser(loginUser.getId());
