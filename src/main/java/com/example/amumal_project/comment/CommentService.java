@@ -2,6 +2,7 @@ package com.example.amumal_project.comment;
 
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
+import com.example.amumal_project.like.repository.CommentLikeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,8 +10,10 @@ import java.util.List;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
-    public CommentService(CommentRepository commentRepository) {
+    private final CommentLikeRepository commentLikeRepository;
+    public CommentService(CommentRepository commentRepository, CommentLikeRepository commentLikeRepository) {
         this.commentRepository = commentRepository;
+        this.commentLikeRepository = commentLikeRepository;
     }
 
     public Comment createComment(Long postId, Long userId, String content) {
@@ -18,12 +21,14 @@ public class CommentService {
             throw new IllegalArgumentException("댓글 내용을 입력해주세요!");
         }
 
-        Comment comment = new Comment(null, userId,postId, content,null);
+        Comment comment = new Comment(null, userId,postId, content,null,0);
         return commentRepository.save(comment);
     }
 
     public List<Comment> getCommentsByPostId(Long postId) {
-        return commentRepository.findByPostId(postId);
+        List<Comment> comments = commentRepository.findByPostId(postId);
+        comments.forEach(c -> c.setLikeCount(commentLikeRepository.countLikes(c.getId())));
+        return comments;
     }
 
     public void deleteComment(Long postId, Long commentId, Long userId) {

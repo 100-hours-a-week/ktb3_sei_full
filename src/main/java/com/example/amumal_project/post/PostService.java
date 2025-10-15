@@ -24,7 +24,7 @@ public class PostService {
             throw new IllegalArgumentException("내용을 입력해주세요!");
         }
 
-        Post post = new Post(null, userId, title,content,0);
+        Post post = new Post(null, userId, title,content,0,0);
         return postRepository.save(post);
     }
 
@@ -104,5 +104,13 @@ public class PostService {
 
        postRepository.delete(id);
 
+    }
+
+
+    public Post increaseViewCount(Long postId) {
+        Post post = getPostById(postId);
+        post.setViewCount(post.getViewCount() + 1);
+        postRepository.update(post.getId(),post.getTitle(),post.getContent());
+        return post;
     }
 }

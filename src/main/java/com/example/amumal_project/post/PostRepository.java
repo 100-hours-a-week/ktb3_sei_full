@@ -13,6 +13,8 @@ public class PostRepository {
 
     public Post save(Post post) {
         post.setId(sequence++);
+        if (post.getLikeCount() == 0) post.setLikeCount(0);
+        if (post.getViewCount() == 0) post.setViewCount(0);
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
         posts.put(post.getId(), post);

@@ -111,7 +111,7 @@ public class PostController {
     public ResponseEntity<Map<String, Object>> getOnePost(@PathVariable Long postId, HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");
 
-        Post post = postService.getPostById(postId);
+        Post post = postService.increaseViewCount(postId);
 
         List<Comment> comments = commentService.getCommentsByPostId(postId);
 
@@ -123,6 +123,7 @@ public class PostController {
         data.put("like_count", likeCount);
         data.put("is_likes", likedByMe);
         data.put("comments", comments);
+        data.put("view_count", post.getViewCount());
 
         Map<String, Object> response = new HashMap<>();
         response.put("message","fetch_success");

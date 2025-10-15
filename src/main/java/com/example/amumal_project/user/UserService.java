@@ -23,7 +23,7 @@ public class UserService {
 
         User user = new User(null, email, password, nickname, profileImageUrl);
 
-        if(user.getProfileImageUrl() == null){
+        if(user.getProfileImageUrl() == null || user.getProfileImageUrl().isBlank()){
             user.setProfileImageUrl("/images/default_profile.png");
         }
         return userRepository.save(user);
@@ -61,7 +61,7 @@ public class UserService {
             }
         }
 
-        if (profileImageUrl != null && profileImageUrl.isBlank()) {
+        if (profileImageUrl == null || profileImageUrl.isBlank()) {
             profileImageUrl = "/images/default_profile.png";
         }
 

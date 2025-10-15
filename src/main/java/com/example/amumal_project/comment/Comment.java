@@ -7,16 +7,18 @@ public class Comment {
     private Long userId;
     private Long postId;
     private String content;
+    private int likeCount;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
     public Comment() {}
 
-    public Comment(Long id, Long userId, Long postId, String content,LocalDateTime created_at) {
+    public Comment(Long id, Long userId, Long postId, String content,LocalDateTime created_at,int likeCount) {
         this.userId = userId;
         this.postId = postId;
         this.id = id;
         this.content = content;
+        this.likeCount = likeCount;
         this.created_at = LocalDateTime.now();
         this.updated_at = LocalDateTime.now();
     }
@@ -38,4 +40,7 @@ public class Comment {
 
     public LocalDateTime getUpdated_at() {return updated_at;}
     public void setUpdated_at(LocalDateTime updated_at) {this.updated_at = updated_at;}
+
+    public int getLikeCount() {return likeCount;}
+    public void setLikeCount(int likeCount) {this.likeCount = likeCount;}
 }

@@ -129,7 +129,7 @@ public class UserController {
     //비밀번호 수정
     @PatchMapping("/password")
     public ResponseEntity<Map<String ,Object>> updateUserPassword(@RequestBody Map<String, String> request, HttpSession session){
-        String newPassword = request.get("newPassword");
+        String newPassword = request.get("new_password");
 
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null){

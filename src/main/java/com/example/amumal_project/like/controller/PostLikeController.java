@@ -22,9 +22,9 @@ public class PostLikeController {
         this.postLikeService = postLikeService;
     }
 
-    @PostMapping("{postId}/likea")
+    @PostMapping("{postId}/likes")
     public ResponseEntity<Map<String, Object>> pressPostLike(@PathVariable Long postId, HttpSession session) {
-        User loginUser = (User) session.getAttribute("user");
+        User loginUser = (User) session.getAttribute("loginUser");
 
         if(loginUser == null){
             throw new UnauthorizedException("로그인이 필요합니다.");
