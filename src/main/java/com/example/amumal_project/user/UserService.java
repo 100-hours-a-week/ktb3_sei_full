@@ -12,7 +12,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User register(String email, String password, String nickname,String profileImageUrl) {
+    public User register(String email, String password, String nickname, String profileImageUrl) {
 
         if(checkEmailDuplicate(email)) {
             throw new IllegalArgumentException("이미 존재하는 이메일 입니다!");
