@@ -1,6 +1,7 @@
 package com.example.amumal_project.user;
 
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
+import com.example.amumal_project.user.Repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

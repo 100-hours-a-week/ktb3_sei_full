@@ -1,11 +1,12 @@
-package com.example.amumal_project.user;
+package com.example.amumal_project.user.Repository;
 
+import com.example.amumal_project.user.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 @Repository
-public class UserRepository {
+public class MemoryUserRepository implements UserRepository {
     private final Map<Long, User> users = new LinkedHashMap<>();
     private long sequence = 0L;
 
@@ -38,17 +39,13 @@ public class UserRepository {
         users.remove(id);
     }
 
-    public void clear() {
-        users.clear();
-        sequence = 0L;
-    }
 
     public Optional<User> update(Long id, String nickname, String profileImageUrl) {
         User user = users.get(id);
         if(user == null) return Optional.empty();
 
         if(nickname != null  && !nickname.isBlank()) user.setNickname(nickname);
-        if(profileImageUrl != null && !nickname.isBlank()) user.setProfileImageUrl(profileImageUrl);
+        if(profileImageUrl != null && !profileImageUrl.isBlank()) user.setProfileImageUrl(profileImageUrl);
 
         users.put(id, user);
         return Optional.of(user);

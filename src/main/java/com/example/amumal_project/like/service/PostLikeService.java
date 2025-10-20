@@ -1,7 +1,7 @@
 package com.example.amumal_project.like.service;
 
+import com.example.amumal_project.like.repository.MemoryPostLikeRepository;
 import com.example.amumal_project.like.repository.PostLikeRepository;
-import com.example.amumal_project.post.Post;
 import org.springframework.stereotype.Service;
 
 @Service

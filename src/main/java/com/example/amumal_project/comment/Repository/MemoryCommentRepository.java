@@ -1,12 +1,13 @@
-package com.example.amumal_project.comment;
+package com.example.amumal_project.comment.Repository;
 
+import com.example.amumal_project.comment.Comment;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
-public class CommentRepository {
+public class MemoryCommentRepository implements CommentRepository {
     private final Map<Long, List<Comment>> allComments = new LinkedHashMap<>();
     private long sequence = 0L;
 

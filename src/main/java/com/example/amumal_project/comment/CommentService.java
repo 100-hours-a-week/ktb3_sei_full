@@ -1,8 +1,10 @@
 package com.example.amumal_project.comment;
 
+import com.example.amumal_project.comment.Repository.CommentRepository;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.like.repository.CommentLikeRepository;
+import com.example.amumal_project.like.repository.MemoryCommentLikeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

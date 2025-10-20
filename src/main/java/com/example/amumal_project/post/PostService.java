@@ -2,6 +2,8 @@ package com.example.amumal_project.post;
 
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
+import com.example.amumal_project.post.Repository.MemoryPostRepository;
+import com.example.amumal_project.post.Repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;

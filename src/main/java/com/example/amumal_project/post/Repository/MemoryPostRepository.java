@@ -1,12 +1,13 @@
-package com.example.amumal_project.post;
+package com.example.amumal_project.post.Repository;
 
+import com.example.amumal_project.post.Post;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
-public class PostRepository {
+public class MemoryPostRepository implements PostRepository {
 
     public final Map<Long, Post> posts = new LinkedHashMap<>();
     private long sequence = 0L;
