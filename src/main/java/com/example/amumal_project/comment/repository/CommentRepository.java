@@ -1,4 +1,4 @@
-package com.example.amumal_project.comment.Repository;
+package com.example.amumal_project.comment.repository;
 
 import com.example.amumal_project.comment.Comment;
 

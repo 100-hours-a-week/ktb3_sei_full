@@ -2,6 +2,7 @@ package com.example.amumal_project.like.controller;
 
 import com.example.amumal_project.common.exception.UnauthorizedException;
 import com.example.amumal_project.like.service.PostLikeService;
+import com.example.amumal_project.like.service.PostLikeServiceImpl;
 import com.example.amumal_project.user.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;

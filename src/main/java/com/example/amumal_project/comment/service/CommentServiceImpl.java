@@ -1,19 +1,19 @@
-package com.example.amumal_project.comment;
+package com.example.amumal_project.comment.service;
 
-import com.example.amumal_project.comment.Repository.CommentRepository;
+import com.example.amumal_project.comment.Comment;
+import com.example.amumal_project.comment.repository.CommentRepository;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.like.repository.CommentLikeRepository;
-import com.example.amumal_project.like.repository.MemoryCommentLikeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CommentService {
+public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
-    public CommentService(CommentRepository commentRepository, CommentLikeRepository commentLikeRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, CommentLikeRepository commentLikeRepository) {
         this.commentRepository = commentRepository;
         this.commentLikeRepository = commentLikeRepository;
     }

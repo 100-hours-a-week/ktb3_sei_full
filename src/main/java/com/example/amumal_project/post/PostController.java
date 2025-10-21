@@ -1,10 +1,12 @@
 package com.example.amumal_project.post;
 
 import com.example.amumal_project.comment.Comment;
-import com.example.amumal_project.comment.CommentService;
+import com.example.amumal_project.comment.service.CommentService;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.UnauthorizedException;
 import com.example.amumal_project.like.service.PostLikeService;
+import com.example.amumal_project.like.service.PostLikeServiceImpl;
+import com.example.amumal_project.post.service.PostService;
 import com.example.amumal_project.user.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;

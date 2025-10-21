@@ -1,8 +1,9 @@
 package com.example.amumal_project.user;
 
-import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.common.exception.UnauthorizedException;
+import com.example.amumal_project.user.service.UserService;
+import com.example.amumal_project.user.service.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

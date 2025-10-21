@@ -1,15 +1,16 @@
-package com.example.amumal_project.user;
+package com.example.amumal_project.user.service;
 
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
-import com.example.amumal_project.user.Repository.UserRepository;
+import com.example.amumal_project.user.User;
+import com.example.amumal_project.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    public UserService(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

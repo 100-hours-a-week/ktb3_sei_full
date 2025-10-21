@@ -1,4 +1,4 @@
-package com.example.amumal_project.post.Repository;
+package com.example.amumal_project.post.repository;
 
 import com.example.amumal_project.post.Post;
 

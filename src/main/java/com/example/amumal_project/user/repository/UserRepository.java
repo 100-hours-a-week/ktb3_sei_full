@@ -1,4 +1,4 @@
-package com.example.amumal_project.user.Repository;
+package com.example.amumal_project.user.repository;
 
 import com.example.amumal_project.user.User;
 

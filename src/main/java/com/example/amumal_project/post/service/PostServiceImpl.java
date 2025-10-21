@@ -1,9 +1,9 @@
-package com.example.amumal_project.post;
+package com.example.amumal_project.post.service;
 
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
-import com.example.amumal_project.post.Repository.MemoryPostRepository;
-import com.example.amumal_project.post.Repository.PostRepository;
+import com.example.amumal_project.post.Post;
+import com.example.amumal_project.post.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class PostService {
+public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
-    public PostService(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 

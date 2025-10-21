@@ -1,6 +1,7 @@
 package com.example.amumal_project.comment;
 
-import com.example.amumal_project.common.exception.ResourceNotFoundException;
+import com.example.amumal_project.comment.service.CommentService;
+import com.example.amumal_project.comment.service.CommentServiceImpl;
 import com.example.amumal_project.common.exception.UnauthorizedException;
 import com.example.amumal_project.user.User;
 import jakarta.servlet.http.HttpSession;
