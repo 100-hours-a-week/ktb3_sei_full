@@ -30,7 +30,7 @@ public class UserController {
         boolean exist = userService.checkEmailDuplicate(email);
 
         if(exist){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재히는 이메일입니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이메일입니다.");
         }
 
         return ResponseEntity.ok("사용 가능한 이메일입니다.");
@@ -53,13 +53,13 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<Map<String ,Object>> signup(@RequestBody User user) {
 
-
         User createdUser = userService.register(
                 user.getEmail(),
                 user.getPassword(),
                 user.getNickname(),
                 user.getProfileImageUrl()
         );
+
         Map<String, Object> response = new HashMap<>();
         response.put("message", "signup_success");
         response.put("data", createdUser);
