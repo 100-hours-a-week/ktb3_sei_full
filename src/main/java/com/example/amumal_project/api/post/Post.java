@@ -7,12 +7,13 @@ public class Post {
     private Long userId;
     private String title;
     private String content;
+    private String ImageUrl;
     private int likeCount;
     private int viewCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Post(Long id, Long userId, String title, String content,int view_count, int like_count) {
+    public Post(Long id, Long userId, String title, String content,String imageUrl,int view_count, int like_count) {
         this.id = id;
         this.userId = userId;
         this.title = title;
@@ -21,9 +22,13 @@ public class Post {
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.ImageUrl = imageUrl;
     }
 
     public Post() {}
+
+    public String getImageUrl() {return ImageUrl;}
+    public void setImageUrl(String imageUrl) {ImageUrl = imageUrl;}
 
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}

@@ -24,7 +24,7 @@ public class PostEntity {
     private String content;
 
     @Column(name = "image")
-    private String postImageUrl;
+    private String imageUrl;
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
@@ -59,7 +59,7 @@ public class PostEntity {
         this.author = author;
         this.title = title;
         this.content = content;
-        this.postImageUrl = postImageUrl;
+        this.imageUrl = postImageUrl;
         this.isDeleted = false;
         this.deletedAt = null;
         this.createdAt = LocalDateTime.now();

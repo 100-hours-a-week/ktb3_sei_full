@@ -4,6 +4,8 @@ import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.api.post.Post;
 import com.example.amumal_project.api.post.repository.PostRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -18,7 +20,7 @@ public class PostServiceImpl implements PostService {
         this.postRepository = postRepository;
     }
 
-    public Post createPost(Long userId, String title, String content) {
+    public Post createPost(Long userId, String title, String content,String imageUrl) {
         if(title == null || title.isBlank()) {
             throw new IllegalArgumentException("제목을 입력해주세요!");
         }
@@ -26,7 +28,7 @@ public class PostServiceImpl implements PostService {
             throw new IllegalArgumentException("내용을 입력해주세요!");
         }
 
-        Post post = new Post(null, userId, title,content,0,0);
+        Post post = new Post(null, userId, title,content,imageUrl,0,0);
         return postRepository.save(post);
     }
 
@@ -86,16 +88,22 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("게시글을 찾을 수 없습니다."));
     }
-
-    public Post updatePost(Long id,Long userId, String title, String content) {
+    @Transactional
+    public Post updatePost(Long id,Long userId, String title, String content,String imageUrl) {
         Post post = getPostById(id);
         if(!post.getUserId().equals(userId)) {
             throw new AccessDeniedException("본인 게시물만 수정할 수 있습니다!");
         }
-        return postRepository.update(id,title,content)
+        if(title == null || title.isBlank()) {
+            throw new IllegalArgumentException("제목을 입력해주세요!");
+        }
+        if(content == null || content.isBlank()) {
+            throw new IllegalArgumentException("내용을 입력해주세요!");
+        }
+        return postRepository.update(id,title,content,imageUrl)
                 .orElseThrow(() -> new ResourceNotFoundException("게시글 수정에 실패했습니다."));
     }
-
+    @Transactional
     public void deletePost(Long id,Long userId) {
         Post post = getPostById(id);
 
@@ -108,11 +116,11 @@ public class PostServiceImpl implements PostService {
 
     }
 
-
+    @Transactional
     public Post increaseViewCount(Long postId) {
         Post post = getPostById(postId);
         post.setViewCount(post.getViewCount() + 1);
-        postRepository.update(post.getId(),post.getTitle(),post.getContent());
+        postRepository.update(post.getId(),post.getTitle(),post.getContent(), post.getImageUrl());
         return post;
     }
 }

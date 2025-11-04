@@ -39,8 +39,8 @@ public class PostController {
         }
         String title = request.get("title");
         String content = request.get("content");
-
-        Post createPost = postService.createPost(user.getId(), title, content);
+        String imageUrl = request.get("image_url");
+        Post createPost = postService.createPost(user.getId(), title, content,imageUrl);
         Map<String, Object> response = new HashMap<>();
         response.put("message","create_success");
         response.put("data", createPost);
@@ -74,13 +74,14 @@ public class PostController {
         }
         String title = request.get("title");
         String content = request.get("content");
+        String imageUrl = request.get("image_url");
 
         Post post = postService.getPostById(postId);
         if(!post.getUserId().equals(user.getId())){
             throw new AccessDeniedException("본인 게시글만 수정할 수 있습니다.");
         }
 
-        Post updatePost = postService.updatePost(postId,user.getId(), title, content);
+        Post updatePost = postService.updatePost(postId,user.getId(), title, content,imageUrl);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message","update_success");

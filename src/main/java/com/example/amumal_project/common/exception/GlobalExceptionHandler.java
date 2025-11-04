@@ -54,6 +54,7 @@ public class GlobalExceptionHandler {
     //500
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleServerError(Exception e){
+        e.printStackTrace();
         Map<String, Object> response = new HashMap<>();
         response.put("message", e.getMessage());
         response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());

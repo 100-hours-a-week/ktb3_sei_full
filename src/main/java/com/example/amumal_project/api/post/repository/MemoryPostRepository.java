@@ -34,12 +34,13 @@ public class MemoryPostRepository implements PostRepository {
         posts.remove(id);
     }
 
-    public Optional<Post> update(Long id, String title, String content) {
+    public Optional<Post> update(Long id, String title, String content,String imageUrl) {
         Post post = posts.get(id);
         if(post == null) return Optional.empty();
 
         if(title != null && !title.isBlank()) post.setTitle(title);
         if(content != null && !content.isBlank()) post.setContent(content);
+        if(imageUrl != null && !imageUrl.isBlank()) post.setImageUrl(imageUrl);
         post.setUpdatedAt(LocalDateTime.now());
         posts.put(id, post);
         return Optional.of(post);
