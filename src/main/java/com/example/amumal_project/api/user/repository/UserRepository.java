@@ -13,4 +13,5 @@ public interface UserRepository  {
     List<User> findAll();
     void delete(Long id);
     Optional<User> update(Long id, String nickname, String profileImageUrl);
+    void setPassword(Long id, String newPassword);
 }

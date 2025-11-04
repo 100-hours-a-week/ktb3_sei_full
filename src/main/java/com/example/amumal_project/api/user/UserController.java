@@ -4,6 +4,7 @@ import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.common.exception.UnauthorizedException;
 import com.example.amumal_project.api.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -114,7 +115,7 @@ public class UserController {
         }
 
         String nickname = (String) request.get("nickname");
-        String profileImageUrl = (String) request.get("profileImageUrl");
+        String profileImageUrl = (String) request.get("profile_image");
 
         User updatedUser = userService.updateUser(loginUser.getId(), nickname, profileImageUrl);
         session.setAttribute("loginUser", updatedUser);

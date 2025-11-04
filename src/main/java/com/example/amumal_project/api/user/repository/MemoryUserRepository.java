@@ -50,5 +50,12 @@ public class MemoryUserRepository implements UserRepository {
         users.put(id, user);
         return Optional.of(user);
     }
+
+    @Override
+    public void setPassword(Long id, String newPassword) {
+        User user = users.get(id);
+        if(user == null) return;
+        user.setPassword(newPassword);
+    }
 }
 

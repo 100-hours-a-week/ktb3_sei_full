@@ -3,6 +3,7 @@ package com.example.amumal_project.api.user.service;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.api.user.User;
 import com.example.amumal_project.api.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다!"));
     }
-
+    @Transactional
     public User updateUser(Long id, String nickname, String profileImageUrl) {
         if(nickname !=null) {
             User currentUser = userRepository.findById(id)
@@ -72,6 +73,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Transactional
     public User updatePassword(Long id, String newPassword) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다!"));
@@ -80,10 +82,10 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("새 비밀번호를 입력해주세요!");
         }
 
-        user.setPassword(newPassword);
+        userRepository.setPassword(user.getId(), newPassword);
         return user;
     }
-
+    @Transactional
     public User deleteUser(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다!"));
