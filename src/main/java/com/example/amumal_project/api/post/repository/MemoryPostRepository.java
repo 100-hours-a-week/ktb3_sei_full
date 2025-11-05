@@ -47,5 +47,6 @@ public class MemoryPostRepository implements PostRepository {
 
     }
 
-
+    public void updateViewCount(Long id) {
+    }
 }

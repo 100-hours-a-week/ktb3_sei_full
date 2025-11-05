@@ -5,6 +5,7 @@ import com.example.amumal_project.api.comment.repository.CommentRepository;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.api.like.repository.CommentLikeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class CommentServiceImpl implements CommentService {
         this.commentRepository = commentRepository;
         this.commentLikeRepository = commentLikeRepository;
     }
-
+    @Transactional
     public Comment createComment(Long postId, Long userId, String content) {
         if(content == null || content.isBlank()) {
             throw new IllegalArgumentException("댓글 내용을 입력해주세요!");
@@ -32,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
         comments.forEach(c -> c.setLikeCount(commentLikeRepository.countLikes(c.getId())));
         return comments;
     }
-
+    @Transactional
     public void deleteComment(Long postId, Long commentId, Long userId) {
         List<Comment> comments = commentRepository.findByPostId(postId);
         if(comments.isEmpty()) {
@@ -48,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
         }
          commentRepository.delete(postId, commentId);
     }
-
+    @Transactional
     public Comment updateComment(Long postId, Long commentId, Long userId, String content) {
         if(content == null || content.isBlank()) {
             throw new IllegalArgumentException("댓글 내용을 입력해주세요!");

@@ -24,12 +24,11 @@ public class MemoryCommentRepository implements CommentRepository {
         return allComments.getOrDefault(postId, new ArrayList<>());
     }
 
-    public boolean delete(Long postId,Long commentId) {
+    public void delete(Long postId,Long commentId) {
         List<Comment> comments = allComments.get(postId);
         if (comments == null) {
-            return false;
         }
-        return comments.removeIf(c -> c.getId().equals(commentId));
+        comments.removeIf(c -> c.getId().equals(commentId));
     }
 
     public Optional<Comment> update(Long postId, Long commentId, String content) {
@@ -48,4 +47,6 @@ public class MemoryCommentRepository implements CommentRepository {
         }
         return Optional.empty();
     }
+
+
 }

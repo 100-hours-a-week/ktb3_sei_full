@@ -11,4 +11,5 @@ public interface PostRepository {
     List<Post> findAll();
     void delete(Long id);
     Optional<Post> update(Long id, String title, String content,String imageUrl);
+    void updateViewCount(Long id);
 }

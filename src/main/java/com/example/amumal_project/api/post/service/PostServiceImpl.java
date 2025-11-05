@@ -4,6 +4,7 @@ import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.api.post.Post;
 import com.example.amumal_project.api.post.repository.PostRepository;
+import com.example.amumal_project.entity.PostEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -120,7 +121,7 @@ public class PostServiceImpl implements PostService {
     public Post increaseViewCount(Long postId) {
         Post post = getPostById(postId);
         post.setViewCount(post.getViewCount() + 1);
-        postRepository.update(post.getId(),post.getTitle(),post.getContent(), post.getImageUrl());
+        postRepository.updateViewCount(postId);
         return post;
     }
 }

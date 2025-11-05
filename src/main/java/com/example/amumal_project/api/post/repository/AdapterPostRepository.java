@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 
 @Primary
 @Repository
-public class AdaptPostRepository implements PostRepository {
+public class AdapterPostRepository implements PostRepository {
     private final JpaPostRepository jpaPostRepository;
     private final JpaUserRepository jpaUserRepository;
-    public AdaptPostRepository(JpaPostRepository jpaPostRepository, JpaUserRepository jpaUserRepository) {
+    public AdapterPostRepository(JpaPostRepository jpaPostRepository, JpaUserRepository jpaUserRepository) {
         this.jpaPostRepository = jpaPostRepository;
         this.jpaUserRepository = jpaUserRepository;
     }
@@ -54,5 +54,10 @@ public class AdaptPostRepository implements PostRepository {
         postEntity.setImageUrl(imageUrl);
         postEntity.setUpdatedAt(LocalDateTime.now());
         return Optional.of(new Post(postEntity.getId(),postEntity.getAuthor().getId(),postEntity.getTitle(),postEntity.getContent(), postEntity.getImageUrl(),postEntity.getViewCount(),postEntity.getLikeCount() ));
+    };
+    @Override
+    public void updateViewCount(Long id){
+        PostEntity postEntity = jpaPostRepository.findById(id).orElseThrow();
+        postEntity.setViewCount(postEntity.getViewCount()+1);
     };
 }
