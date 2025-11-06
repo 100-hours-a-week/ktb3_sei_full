@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@Table(name = "post_likes")
+@Table(name = "comment_likes")
 public class CommentLikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

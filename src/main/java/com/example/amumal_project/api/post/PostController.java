@@ -114,15 +114,12 @@ public class PostController {
 
         List<Comment> comments = commentService.getCommentsByPostId(postId);
 
-        int likeCount = postLikeService.countLikes(postId);
-        boolean likedByMe = loginUser !=null && postLikeService.isLikedByUser(postId, loginUser.getId());
+        int likeCount = post.getLikeCount();
 
         Map<String, Object> data = new HashMap<>();
         data.put("post", post);
-        data.put("like_count", likeCount);
-        data.put("is_likes", likedByMe);
         data.put("comments", comments);
-        data.put("view_count", post.getViewCount());
+
 
         Map<String, Object> response = new HashMap<>();
         response.put("message","fetch_success");

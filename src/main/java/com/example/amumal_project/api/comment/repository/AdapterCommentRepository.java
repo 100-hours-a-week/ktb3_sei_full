@@ -32,6 +32,8 @@ public class AdapterCommentRepository implements CommentRepository {
        PostEntity post = jpaPostRepository.findById(comment.getPostId()).orElseThrow();
        CommentEntity commentEntity = new CommentEntity(post, author, comment.getContent());
        CommentEntity savedComment = jpaCommentRepository.save(commentEntity);
+       post.setCommentCount(post.getCommentCount()+1);
+       jpaPostRepository.save(post);
        return new Comment(savedComment.getId(),savedComment.getAuthor().getId(), savedComment.getPost().getId(),savedComment.getContent(),savedComment.getCreatedAt(),savedComment.getLikeCount());
    };
 
@@ -46,6 +48,10 @@ public class AdapterCommentRepository implements CommentRepository {
        CommentEntity commentEntity = jpaCommentRepository.findById(commentId).orElseThrow();
        commentEntity.setIsDeleted(true);
        commentEntity.setDeletedAt(LocalDateTime.now());
+
+       PostEntity post = jpaPostRepository.findById(postId).orElseThrow();
+       post.setCommentCount(post.getCommentCount()-1);
+       jpaPostRepository.save(post);
    };
    @Override
    public Optional<Comment> update(Long postId, Long commentId, String content){
@@ -55,6 +61,10 @@ public class AdapterCommentRepository implements CommentRepository {
        return Optional.of(new Comment(commentEntity.getId(),commentEntity.getAuthor().getId(),commentEntity.getPost().getId(),commentEntity.getContent(),commentEntity.getCreatedAt(),commentEntity.getLikeCount()));
    };
 
-
+    @Override
+   public Optional<Comment> findById(Long id){
+        return jpaCommentRepository.findById(id)
+                .map(e -> new Comment(e.getId(),e.getAuthor().getId(),e.getPost().getId(),e.getContent(),e.getCreatedAt(),e.getLikeCount()));
+    }
 
 }

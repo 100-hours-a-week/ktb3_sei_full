@@ -1,6 +1,7 @@
-package com.example.amumal_project.api.comment.repository;
+/* package com.example.amumal_project.api.comment.repository;
 
 import com.example.amumal_project.api.comment.Comment;
+import com.example.amumal_project.api.comment.repository.CommentRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -49,4 +50,6 @@ public class MemoryCommentRepository implements CommentRepository {
     }
 
 
+
 }
+*/

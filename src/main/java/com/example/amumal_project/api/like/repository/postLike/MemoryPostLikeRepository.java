@@ -1,5 +1,6 @@
-package com.example.amumal_project.api.like.repository;
+/*package com.example.amumal_project.api.like.repository.postLike;
 
+import com.example.amumal_project.api.like.repository.postLike.PostLikeRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -29,3 +30,4 @@ public class MemoryPostLikeRepository implements PostLikeRepository {
         return postLikes.getOrDefault(postId, Collections.emptySet()).contains(userId);
     }
 }
+*/

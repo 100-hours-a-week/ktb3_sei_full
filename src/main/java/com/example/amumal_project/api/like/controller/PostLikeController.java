@@ -18,6 +18,7 @@ import java.util.Map;
 @RequestMapping("/posts")
 public class PostLikeController {
     private final PostLikeService postLikeService;
+
     public PostLikeController(PostLikeService postLikeService) {
         this.postLikeService = postLikeService;
     }
@@ -25,19 +26,20 @@ public class PostLikeController {
     @PostMapping("{postId}/likes")
     public ResponseEntity<Map<String, Object>> pressPostLike(@PathVariable Long postId, HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");
-
         if(loginUser == null){
             throw new UnauthorizedException("로그인이 필요합니다.");
         }
 
-        boolean isLiked = postLikeService.likePost(postId, loginUser.getId());
+        boolean isLiked = postLikeService.togglePostLike(postId, loginUser.getId());
+        String message = isLiked ? "like_created" : "like_deleted";
 
         Map<String, Object> data = new HashMap<>();
         data.put("postId", postId);
         data.put("isLiked", isLiked);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("message","liked success");
+
+        response.put("message",message);
         response.put("data", data);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

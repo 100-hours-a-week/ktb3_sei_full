@@ -1,5 +1,7 @@
+/*
 package com.example.amumal_project.api.like.repository;
 
+import com.example.amumal_project.api.like.repository.commentLike.CommentLikeRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -30,3 +32,4 @@ public class MemoryCommentLikeRepository implements CommentLikeRepository {
         return commentLikes.getOrDefault(commentId, Collections.emptySet()).size();
     }
 }
+*/

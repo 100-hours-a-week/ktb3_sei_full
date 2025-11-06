@@ -30,7 +30,7 @@ public class CommentLikeController {
            throw new UnauthorizedException("로그인이 필요합니다!");
 
         }
-        boolean isLiked = commentLikeService.likeComment(commentId, loginUser.getId());
+        boolean isLiked = commentLikeService.toggleCommentLike(commentId, loginUser.getId());
 
         Map<String, Object> data = new HashMap<>();
         data.put("post_id", postId);
@@ -38,7 +38,8 @@ public class CommentLikeController {
         data.put("is_liked", isLiked);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "like_success");
+        String message = isLiked ? "like_created" : "like_deleted";
+        response.put("message", message);
         response.put("data", data);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

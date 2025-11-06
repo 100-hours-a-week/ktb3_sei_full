@@ -4,7 +4,7 @@ import com.example.amumal_project.api.comment.Comment;
 import com.example.amumal_project.api.comment.repository.CommentRepository;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
-import com.example.amumal_project.api.like.repository.CommentLikeRepository;
+import com.example.amumal_project.api.like.repository.commentLike.CommentLikeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
