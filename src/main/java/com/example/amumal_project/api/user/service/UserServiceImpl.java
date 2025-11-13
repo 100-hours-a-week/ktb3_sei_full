@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
             user.setProfileImageUrl("/images/default_profile.png");
         }
         return userRepository.save(user);
+
     }
 
     public boolean checkEmailDuplicate(String email){
@@ -102,4 +103,8 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+
+
+
 }

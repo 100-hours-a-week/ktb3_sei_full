@@ -1,7 +1,10 @@
 package com.example.amumal_project.api.user.service;
 
 import com.example.amumal_project.api.user.User;
+import org.apache.commons.lang3.mutable.Mutable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
