@@ -2,6 +2,7 @@ package com.example.amumal_project.api.comment.service;
 
 import com.example.amumal_project.api.comment.Comment;
 import com.example.amumal_project.api.comment.repository.CommentRepository;
+import com.example.amumal_project.api.user.repository.JpaUserRepository;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.api.like.repository.commentLike.CommentLikeRepository;
@@ -14,17 +15,19 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
-    public CommentServiceImpl(CommentRepository commentRepository, CommentLikeRepository commentLikeRepository) {
+    private final JpaUserRepository jpaUserRepository;
+    public CommentServiceImpl(CommentRepository commentRepository, CommentLikeRepository commentLikeRepository, JpaUserRepository jpaUserRepository) {
         this.commentRepository = commentRepository;
         this.commentLikeRepository = commentLikeRepository;
+        this.jpaUserRepository = jpaUserRepository;
     }
     @Transactional
     public Comment createComment(Long postId, Long userId, String content) {
         if(content == null || content.isBlank()) {
             throw new IllegalArgumentException("댓글 내용을 입력해주세요!");
         }
-
-        Comment comment = new Comment(null,userId,postId, content,null,0);
+        String nickname = jpaUserRepository.findById(userId).get().getNickname();
+        Comment comment = new Comment(null,userId,postId, content,null,0,nickname);
         return commentRepository.save(comment);
     }
 

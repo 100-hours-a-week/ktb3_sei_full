@@ -20,7 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/images")
 public class imageController {
-    private static final String UPLOAD_DIR = "/Users/jang-yunseo/uploaded-images/";
+    private static final String UPLOAD_DIR = "/Users/jang-yunseo/uploaded/";
 
     @PostMapping("/upload")
     public ResponseEntity<Map<String, Object>> uploadImage(@RequestParam("file") MultipartFile file) {
@@ -42,7 +42,7 @@ public class imageController {
             Path filePath = uploadPath.resolve(uniqueFilename);
             file.transferTo(filePath.toFile());
 
-            String imageUrl = "/uploads/" + uniqueFilename;
+            String imageUrl = "/upload/" + uniqueFilename;
 
             response.put("message", "upload_success");
             response.put("url", imageUrl);

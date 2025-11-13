@@ -14,7 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://127.0.0.1:5500")
+@CrossOrigin(
+        origins = "http://127.0.0.1:5500",
+        allowCredentials = "true"
+)
 @RestController
 @RequestMapping("/users")
 public class UserController {

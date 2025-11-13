@@ -10,10 +10,11 @@ public class Comment {
     private int likeCount;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
+    private String nickname;
 
     public Comment() {}
 
-    public Comment(Long id, Long userId, Long postId, String content,LocalDateTime created_at,int likeCount) {
+    public Comment(Long id, Long userId, Long postId, String content,LocalDateTime created_at,int likeCount, String nickname) {
         this.userId = userId;
         this.postId = postId;
         this.id = id;
@@ -21,6 +22,7 @@ public class Comment {
         this.likeCount = likeCount;
         this.created_at = LocalDateTime.now();
         this.updated_at = LocalDateTime.now();
+        this.nickname = nickname;
     }
 
     public Long getId() {return id;}
