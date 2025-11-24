@@ -6,6 +6,7 @@ import com.example.amumal_project.api.user.repository.JpaUserRepository;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.api.like.repository.commentLike.CommentLikeRepository;
+import com.example.amumal_project.entity.UserEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,16 @@ public class CommentServiceImpl implements CommentService {
 
     public List<Comment> getCommentsByPostId(Long postId) {
         List<Comment> comments = commentRepository.findByPostId(postId);
-        comments.forEach(c -> c.setLikeCount(commentLikeRepository.countLikes(c.getId())));
+
+
+        comments.forEach(c -> {
+            c.setLikeCount(commentLikeRepository.countLikes(c.getId()));
+            String nickname = jpaUserRepository.findById(c.getUserId())
+                    .map(UserEntity::getNickname)
+                    .orElse("탈퇴한 사용자");
+            c.setNickname(nickname);
+        });
+
         return comments;
     }
     @Transactional

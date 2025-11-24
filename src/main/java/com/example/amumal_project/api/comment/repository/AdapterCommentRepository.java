@@ -39,7 +39,7 @@ public class AdapterCommentRepository implements CommentRepository {
 
    @Override
    public List<Comment> findByPostId(long postId){
-       return jpaCommentRepository.findByPostId(postId).stream()
+       return jpaCommentRepository.findByPostIdAndIsDeletedFalseOrderByIdAsc(postId).stream()
                .map(e -> new Comment(e.getId(),e.getAuthor().getId(),e.getPost().getId(),e.getContent(),e.getCreatedAt(),e.getLikeCount(), e.getAuthor().getNickname()))
                .collect(Collectors.toList());
    };

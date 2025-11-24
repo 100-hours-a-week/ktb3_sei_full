@@ -45,4 +45,7 @@ public class Comment {
 
     public int getLikeCount() {return likeCount;}
     public void setLikeCount(int likeCount) {this.likeCount = likeCount;}
+
+    public String getNickname() {return nickname;}
+    public void setNickname(String nickname) {this.nickname = nickname;}
 }

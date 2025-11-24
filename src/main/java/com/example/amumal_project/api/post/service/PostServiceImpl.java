@@ -1,5 +1,6 @@
 package com.example.amumal_project.api.post.service;
 
+import com.example.amumal_project.api.user.repository.JpaUserRepository;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.api.post.Post;
@@ -9,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +19,10 @@ import java.util.Map;
 @Service
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
-    public PostServiceImpl(PostRepository postRepository) {
+    private final JpaUserRepository jpaUserRepository;
+    public PostServiceImpl(PostRepository postRepository, JpaUserRepository jpaUserRepository) {
         this.postRepository = postRepository;
+        this.jpaUserRepository = jpaUserRepository;
     }
 
     public Post createPost(Long userId, String title, String content,String imageUrl) {
@@ -28,8 +32,10 @@ public class PostServiceImpl implements PostService {
         if(content == null || content.isBlank()) {
             throw new IllegalArgumentException("내용을 입력해주세요!");
         }
-
-        Post post = new Post(null, userId, title,content,imageUrl,0,0);
+        String nickname = jpaUserRepository.findById(userId).get().getNickname();
+        LocalDateTime createdAt = LocalDateTime.now();
+        LocalDateTime updatedAt = LocalDateTime.now();
+        Post post = new Post(null, userId, title,content,imageUrl,0,0, nickname,createdAt, updatedAt);
         return postRepository.save(post);
     }
 

@@ -20,7 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/images")
 public class imageController {
-    private static final String UPLOAD_DIR = "/Users/jang-yunseo/uploaded/";
+    private static final String UPLOAD_DIR = "/Users/jang-yunseo/upload/";
 
     @PostMapping("/upload")
     public ResponseEntity<Map<String, Object>> uploadImage(@RequestParam("file") MultipartFile file) {
@@ -33,7 +33,8 @@ public class imageController {
 
         try{
             String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-            String uniqueFilename = UUID.randomUUID() + "_" + originalFilename;
+            String cleanedFilename = originalFilename.replaceAll("\\s+", "_");
+            String uniqueFilename = UUID.randomUUID() + "_" + cleanedFilename;
 
             Path uploadPath = Paths.get(UPLOAD_DIR);
             if (!Files.exists(uploadPath)) {

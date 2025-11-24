@@ -12,5 +12,7 @@ import java.util.List;
 public interface JpaPostRepository extends JpaRepository<PostEntity, Long> {
     @Query("SELECT p FROM PostEntity p JOIN FETCH p.author")
     List<PostEntity> findAllByAuthor();
+    List<PostEntity> findByIsDeletedFalseOrderByIdDesc();
+
 
 }

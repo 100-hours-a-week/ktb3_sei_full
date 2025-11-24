@@ -12,17 +12,19 @@ public class Post {
     private int viewCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String nickname;
 
-    public Post(Long id, Long userId, String title, String content,String imageUrl,int view_count, int like_count) {
+    public Post(Long id, Long userId, String title, String content,String imageUrl,int view_count, int like_count, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
         this.title = title;
         this.viewCount = view_count;
         this.likeCount = like_count;
         this.content = content;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.ImageUrl = imageUrl;
+        this.nickname = nickname;
     }
 
     public Post() {}
@@ -53,4 +55,7 @@ public class Post {
 
     public int getLikeCount() {return likeCount;}
     public void setLikeCount(int like_count) {this.likeCount = like_count;}
+
+    public String getNickname() {return nickname;}
+    public void setNickname(String nickname) {this.nickname = nickname;}
 }

@@ -1,5 +1,9 @@
 package com.example.amumal_project.api.user;
 
+import com.example.amumal_project.api.user.dto.UserDto;
+import com.example.amumal_project.api.user.dto.UserRequest;
+import com.example.amumal_project.api.user.dto.UserResponse;
+import com.example.amumal_project.common.CommonResponse;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.common.exception.UnauthorizedException;
 import com.example.amumal_project.api.user.service.UserService;
@@ -56,7 +60,7 @@ public class UserController {
 
     //회원가입
     @PostMapping("/signup")
-    public ResponseEntity<Map<String ,Object>> signup(@RequestBody User user) {
+    public ResponseEntity<CommonResponse> signup(@RequestBody UserRequest.SignupRequest user) {
 
         User createdUser = userService.register(
                 user.getEmail(),
@@ -65,17 +69,15 @@ public class UserController {
                 user.getProfileImageUrl()
         );
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "signup_success");
-        response.put("data", createdUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.ok()
+                .body(new CommonResponse("signup_success"));
     }
 
     //로그인
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request, HttpSession session){
-        String email = request.get("email");
-        String password = request.get("password");
+    public ResponseEntity<CommonResponse> login(@RequestBody UserRequest.LoginRequest request, HttpSession session){
+        String email = request.getEmail();
+        String password = request.getPassword();
 
         User user = userService.login(email, password);
 
@@ -85,57 +87,70 @@ public class UserController {
         response.put("message", "login_success");
         response.put("data", user);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new CommonResponse("login_success"));
     }
 
     //전체 회원 목록 조회
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<UserResponse.GetUsersResponse> getAllUsers(){
         List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+
+        List<UserDto> userDtos = users.stream()
+                .map(user -> UserDto.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .nickname(user.getNickname())
+                        .profileImageUrl(user.getProfileImageUrl())
+                        .build()).toList();
+        return ResponseEntity.ok(UserResponse.GetUsersResponse.builder().users(userDtos).build());
     }
 
     //회원 정보 조회
     @GetMapping("/profile")
     public ResponseEntity<Map<String,Object>> getUserProfile(HttpSession session){
         User loginUser = (User) session.getAttribute("loginUser");
-
         if(loginUser == null){
             throw new ResourceNotFoundException("사용자를 찾을 수 없습니다.");
         }
+        UserDto userDto = UserDto.builder()
+                .id(loginUser.getId())
+                .email(loginUser.getEmail())
+                .nickname(loginUser.getNickname())
+                .profileImageUrl(loginUser.getProfileImageUrl())
+                .build();
+
+
         Map<String,Object> response = new HashMap<>();
         response.put("message", "profile_success");
-        response.put("data", loginUser);
+        response.put("data", userDto);
 
         return ResponseEntity.ok(response);
     }
 
     //회원 정보 수정
     @PatchMapping("/profile")
-    public ResponseEntity<Map<String ,Object>> updateUserProfile(@RequestBody Map<String, Object> request, HttpSession session){
+    public ResponseEntity<CommonResponse> updateUserProfile(@RequestBody UserRequest.ProfileEditRequest request, HttpSession session){
 
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null){
             throw new UnauthorizedException("잘못된 접근입니다.");
         }
 
-        String nickname = (String) request.get("nickname");
-        String profileImageUrl = (String) request.get("profile_image");
+        String nickname = (String) request.getNickname();
+        String profileImageUrl = (String) request.getProfileImageUrl();
 
         User updatedUser = userService.updateUser(loginUser.getId(), nickname, profileImageUrl);
         session.setAttribute("loginUser", updatedUser);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "update_success");
-        response.put("data", updatedUser);
-        return ResponseEntity.ok(response);
+
+        return ResponseEntity.ok(new CommonResponse("profile_success"));
 
     }
 
     //비밀번호 수정
     @PatchMapping("/password")
-    public ResponseEntity<Map<String ,Object>> updateUserPassword(@RequestBody Map<String, String> request, HttpSession session){
-        String newPassword = request.get("new_password");
+    public ResponseEntity<CommonResponse> updateUserPassword(@RequestBody UserRequest.PasswordResetRequest request, HttpSession session){
+        String newPassword = request.getNew_password();
 
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null){
@@ -144,15 +159,13 @@ public class UserController {
 
         userService.updatePassword(loginUser.getId(), newPassword);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "update_success");
-        response.put("data", null);
-        return ResponseEntity.ok(response);
+
+        return ResponseEntity.ok(new CommonResponse("update_success"));
     }
 
     //회원 탈퇴
     @DeleteMapping("/profile")
-    public ResponseEntity<Map<String, Object>> deleteUser(HttpSession session){
+    public ResponseEntity<CommonResponse> deleteUser(HttpSession session){
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null){
             throw new UnauthorizedException("잘못된 접근입니다.");
@@ -161,23 +174,14 @@ public class UserController {
         User deletedUser = userService.deleteUser(loginUser.getId());
         session.invalidate();
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "delete_success");
-        response.put("data", null);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new CommonResponse("delete_success"));
     }
 
     //로그아웃
     @DeleteMapping("/session")
-    public ResponseEntity<Map<String, Object>> logout(HttpSession session){
+    public ResponseEntity<CommonResponse> logout(HttpSession session){
         session.invalidate();
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "logout_success");
-        response.put("data", null);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new CommonResponse("logout_success"));
     }
 
 
