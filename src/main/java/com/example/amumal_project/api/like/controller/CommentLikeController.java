@@ -1,5 +1,6 @@
 package com.example.amumal_project.api.like.controller;
 
+import com.example.amumal_project.common.CommonResponse;
 import com.example.amumal_project.common.exception.UnauthorizedException;
 import com.example.amumal_project.api.like.service.CommentLikeService;
 import com.example.amumal_project.api.user.User;
@@ -24,7 +25,7 @@ public class CommentLikeController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> pressCommentLike(@PathVariable Long postId, @PathVariable Long commentId, HttpSession session) {
+    public ResponseEntity<CommonResponse> pressCommentLike(@PathVariable Long postId, @PathVariable Long commentId, HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null){
            throw new UnauthorizedException("로그인이 필요합니다!");
@@ -37,11 +38,8 @@ public class CommentLikeController {
         data.put("comment_id", commentId);
         data.put("is_liked", isLiked);
 
-        Map<String, Object> response = new HashMap<>();
         String message = isLiked ? "like_created" : "like_deleted";
-        response.put("message", message);
-        response.put("data", data);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse(message));
     }
 }

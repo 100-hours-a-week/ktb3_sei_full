@@ -1,6 +1,8 @@
 package com.example.amumal_project.api.post.repository;
 
 import com.example.amumal_project.api.post.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -26,10 +28,6 @@ public class MemoryPostRepository implements PostRepository {
         return Optional.ofNullable(posts.get(id));
     }
 
-    public List<Post> findAll() {
-        return new ArrayList<>(posts.values());
-    }
-
     public void delete(Long id) {
         posts.remove(id);
     }
@@ -49,4 +47,8 @@ public class MemoryPostRepository implements PostRepository {
 
     public void updateViewCount(Long id) {
     }
+    public Page<Post> findAll(Pageable pageable){
+        return Page.empty(pageable);
+    };
+
 }

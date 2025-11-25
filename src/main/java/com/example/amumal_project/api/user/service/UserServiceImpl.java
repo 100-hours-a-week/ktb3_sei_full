@@ -15,6 +15,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public User register(String email, String password, String nickname, String profileImageUrl) {
 
         if(checkEmailDuplicate(email)) {

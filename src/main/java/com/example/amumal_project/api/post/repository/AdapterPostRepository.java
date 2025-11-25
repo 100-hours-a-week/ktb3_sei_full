@@ -5,6 +5,8 @@ import com.example.amumal_project.api.user.repository.JpaUserRepository;
 import com.example.amumal_project.entity.PostEntity;
 import com.example.amumal_project.entity.UserEntity;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -33,12 +35,25 @@ public class AdapterPostRepository implements PostRepository {
         return jpaPostRepository.findById(id)
                 .map(e -> new Post( e.getId(), e.getAuthor().getId(),e.getTitle(), e.getContent(),e.getImageUrl(),e.getViewCount(),e.getLikeCount(), e.getAuthor().getNickname(), e.getCreatedAt(), e.getUpdatedAt()));
     };
+
     @Override
-    public List<Post> findAll(){
-        return jpaPostRepository.findByIsDeletedFalseOrderByIdDesc().stream()
-                .map(e -> new Post( e.getId(), e.getAuthor().getId(),e.getTitle(), e.getContent(),e.getImageUrl(),e.getViewCount(),e.getLikeCount(),  e.getAuthor().getNickname(), e.getCreatedAt(), e.getUpdatedAt()))
-                .collect(Collectors.toList());
-    };
+    public Page<Post> findAll(Pageable pageable) {
+        Page<PostEntity> entityPage = jpaPostRepository.findByIsDeletedFalse(pageable);
+
+        return entityPage.map(e -> new Post(
+                e.getId(),
+                e.getAuthor().getId(),
+                e.getTitle(),
+                e.getContent(),
+                e.getImageUrl(),
+                e.getViewCount(),
+                e.getLikeCount(),
+                e.getAuthor().getNickname(),
+                e.getCreatedAt(),
+                e.getUpdatedAt()
+        ));
+    }
+
     @Override
     public void delete(Long id){
         PostEntity postEntity = jpaPostRepository.findById(id).orElseThrow();

@@ -7,10 +7,10 @@ import java.util.Map;
 
 public interface PostService {
     Post createPost(Long userId, String title, String content,String imageUrl);
-    List<Post> getAllPosts();
     Map<String, Object> getPagedPosts(int page, int size, String sort);
     Post getPostById(Long id);
     Post updatePost(Long id,Long userId, String title, String content,String imageUrl);
     void deletePost(Long id,Long userId);
     Post increaseViewCount(Long postId);
+
 }

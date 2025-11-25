@@ -1,5 +1,7 @@
 package com.example.amumal_project.api.post.service;
 
+import com.example.amumal_project.api.post.dto.PostDto;
+import com.example.amumal_project.api.post.dto.PostResponse;
 import com.example.amumal_project.api.user.repository.JpaUserRepository;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
@@ -8,6 +10,10 @@ import com.example.amumal_project.api.post.repository.PostRepository;
 import com.example.amumal_project.entity.PostEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,57 +45,48 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(post);
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
-    }
 
-    public Map<String, Object> getPagedPosts(int page,int size, String sort){
-        List<Post> allPosts = postRepository.findAll();
+    public Map<String, Object> getPagedPosts(int page, int size, String sort) {
 
         String[] sortParams = sort.split(",");
         String sortField = sortParams[0];
         boolean isDesc = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc");
 
-        Comparator<Post> comparator;
+        Sort.Direction direction = isDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sortOption = Sort.by(direction, sortField);
 
-        switch (sortField) {
-            case "title":
-                comparator = Comparator.comparing(Post::getTitle, String.CASE_INSENSITIVE_ORDER);
-                break;
-            case "updatedAt":
-            case "updated_at":
-                comparator = Comparator.comparing(Post::getUpdatedAt);
-                break;
-            case "createdAt":
-            case "created_at":
-            default:
-                comparator = Comparator.comparing(Post::getCreatedAt);
-                break;
-        }
+        Pageable pageable = PageRequest.of(page - 1, size, sortOption);
 
-        if (isDesc) {
-            comparator = comparator.reversed();
-        }
+        Page<Post> postPage = postRepository.findAll(pageable);
 
-        allPosts.sort(comparator);
+        List<PostDto> dtoList = postPage.getContent()
+                .stream()
+                .map(post -> PostDto.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .nickname(post.getNickname())
+                        .imageUrl(post.getImageUrl())
+                        .viewCount(post.getViewCount())
+                        .likeCount(post.getLikeCount())
+                        .createdAt(post.getCreatedAt())
+                        .updatedAt(post.getUpdatedAt())
+                        .nickname(post.getNickname())
+                        .build()
+                )
+                .toList();
 
-        int totalPosts = allPosts.size();
-        int totalPages = (int) Math.ceil((double) totalPosts / size);
-        int fromIndex = Math.max(0, (page - 1) * size);
-        int toIndex = Math.min(fromIndex + size, totalPosts);
-
-        List<Post> pagedPosts = allPosts.subList(fromIndex, toIndex);
 
         Map<String, Object> result = new HashMap<>();
         result.put("page", page);
         result.put("size", size);
-        result.put("totalPages", totalPages);
-        result.put("totalPosts", totalPosts);
+        result.put("totalPages", postPage.getTotalPages());
+        result.put("totalPosts", postPage.getTotalElements());
         result.put("sort", sort);
-        result.put("posts", pagedPosts);
+        result.put("posts", dtoList);
 
         return result;
     }
+
 
     public Post getPostById(Long id) {
         return postRepository.findById(id)

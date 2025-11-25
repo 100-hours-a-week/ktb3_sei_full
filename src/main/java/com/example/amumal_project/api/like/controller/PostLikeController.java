@@ -1,5 +1,6 @@
 package com.example.amumal_project.api.like.controller;
 
+import com.example.amumal_project.api.like.dto.PostLikeResponse;
 import com.example.amumal_project.common.exception.UnauthorizedException;
 import com.example.amumal_project.api.like.service.PostLikeService;
 import com.example.amumal_project.api.user.User;
@@ -24,7 +25,7 @@ public class PostLikeController {
     }
 
     @PostMapping("{postId}/likes")
-    public ResponseEntity<Map<String, Object>> pressPostLike(@PathVariable Long postId, HttpSession session) {
+    public ResponseEntity<PostLikeResponse> pressPostLike(@PathVariable Long postId, HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null){
             throw new UnauthorizedException("로그인이 필요합니다.");
@@ -33,15 +34,8 @@ public class PostLikeController {
         boolean isLiked = postLikeService.togglePostLike(postId, loginUser.getId());
         String message = isLiked ? "like_created" : "like_deleted";
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("postId", postId);
-        data.put("isLiked", isLiked);
+        PostLikeResponse.PostLikeDetailData data = new PostLikeResponse.PostLikeDetailData(postId, isLiked);
 
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("message",message);
-        response.put("data", data);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(new PostLikeResponse(message,data));
     }
 }

@@ -1,7 +1,8 @@
 package com.example.amumal_project.api.image;
 
 
-import jakarta.servlet.http.HttpSession;
+import com.example.amumal_project.api.image.dto.ImageResponse;
+import com.example.amumal_project.common.CommonResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -23,12 +24,11 @@ public class imageController {
     private static final String UPLOAD_DIR = "/Users/jang-yunseo/upload/";
 
     @PostMapping("/upload")
-    public ResponseEntity<Map<String, Object>> uploadImage(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
         Map<String, Object> response = new HashMap<>();
 
         if (file.isEmpty()) {
-            response.put("message", "파일이 비어 있습니다.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponse("파일이 비어 있습니다."));
         }
 
         try{
@@ -45,13 +45,10 @@ public class imageController {
 
             String imageUrl = "/upload/" + uniqueFilename;
 
-            response.put("message", "upload_success");
-            response.put("url", imageUrl);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(new ImageResponse.SuccessResponse("upload_success",imageUrl));
         } catch (IOException e) {
             e.printStackTrace();
-            response.put("message", "파일 업로드 실패");
-             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CommonResponse("파일 업로드 실패"));
     }
     }
 }
