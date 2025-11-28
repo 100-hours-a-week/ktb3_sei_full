@@ -17,5 +17,4 @@ public interface UserService {
     User updateUser(Long id, String nickname, String profileImageUrl);
     User updatePassword(Long id, String newPassword);
     User deleteUser(Long id);
-    User login(String email, String password);
 }

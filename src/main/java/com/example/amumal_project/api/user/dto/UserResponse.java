@@ -1,5 +1,6 @@
 package com.example.amumal_project.api.user.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,6 +11,13 @@ public class UserResponse {
     @Getter
     public static class GetUsersResponse {
         private List<UserDto> users;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class LoginResponse {
+        private String message;
+        private String accessToken;
     }
 
 

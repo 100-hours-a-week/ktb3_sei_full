@@ -4,6 +4,10 @@ import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.api.user.User;
 import com.example.amumal_project.api.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +15,11 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    public UserServiceImpl(UserRepository userRepository) {
+    private final PasswordEncoder passwordEncoder;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+
     }
 
     @Transactional
@@ -24,8 +31,9 @@ public class UserServiceImpl implements UserService {
         if(checkNicknameDuplicate(nickname)) {
             throw new IllegalArgumentException("이미 존재하는 닉네임 입니다!");
         }
+        String encodedPassword = passwordEncoder.encode(password);
 
-        User user = new User(null,email, password, nickname, profileImageUrl);
+        User user = new User(null,email, encodedPassword, nickname, profileImageUrl);
 
         if(user.getProfileImageUrl() == null || user.getProfileImageUrl().isBlank()){
             user.setProfileImageUrl("/images/default_profile.png");
@@ -96,14 +104,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public User login(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다!"));
-        if(!user.getPassword().equals(password)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다!");
-        }
-        return user;
-    }
 
 
 

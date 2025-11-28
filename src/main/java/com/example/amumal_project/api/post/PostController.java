@@ -6,15 +6,19 @@ import com.example.amumal_project.api.comment.service.CommentService;
 import com.example.amumal_project.api.post.dto.PostDto;
 import com.example.amumal_project.api.post.dto.PostRequest;
 import com.example.amumal_project.api.post.dto.PostResponse;
+import com.example.amumal_project.api.user.service.UserService;
 import com.example.amumal_project.common.CommonResponse;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.UnauthorizedException;
 import com.example.amumal_project.api.like.service.PostLikeService;
 import com.example.amumal_project.api.post.service.PostService;
 import com.example.amumal_project.api.user.User;
+import com.example.amumal_project.security.details.CustomUserDetails;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -32,20 +36,23 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
     private final PostLikeService postLikeService;
+    private final UserService userService;
 
-    public PostController(PostService postService, CommentService commentService, PostLikeService postLikeService) {
+    public PostController(PostService postService, CommentService commentService, PostLikeService postLikeService, UserService userService) {
         this.postService = postService;
         this.commentService = commentService;
         this.postLikeService = postLikeService;
+        this.userService = userService;
     }
 
     //게시글 작성
     @PostMapping
-    public ResponseEntity<CommonResponse> createPost(@RequestBody PostRequest request, HttpSession session) {
-        User user = (User) session.getAttribute("loginUser");
-        if(user == null){
-            throw new UnauthorizedException("잘못된 접근 입니다.");
-        }
+    public ResponseEntity<CommonResponse> createPost(@RequestBody PostRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+        User user = userService.getUserById(userDetails.getUserId());
+
         Post createPost = postService.createPost(
                 user.getId(),
                 request.getTitle(),
@@ -57,11 +64,11 @@ public class PostController {
 
     //게시글 삭제
     @DeleteMapping("/{postId}")
-    public ResponseEntity<CommonResponse> deletePost(@PathVariable Long postId, HttpSession session) {
-        User user = (User) session.getAttribute("loginUser");
-        if(user == null){
-            throw new UnauthorizedException("잘못된 접근입니다.");
-        }
+    public ResponseEntity<CommonResponse> deletePost(@PathVariable Long postId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+        User user = userService.getUserById(userDetails.getUserId());
 
         Post post = postService.getPostById(postId);
 
@@ -72,12 +79,11 @@ public class PostController {
 
     //게시글 수정
     @PatchMapping("/{postId}")
-    public ResponseEntity<CommonResponse> updatePost(@PathVariable Long postId, @RequestBody PostRequest request, HttpSession session) {
-        User user = (User) session.getAttribute("loginUser");
-        if(user == null){
-            throw new UnauthorizedException("잘못된 접근입니다.");
-        }
+    public ResponseEntity<CommonResponse> updatePost(@PathVariable Long postId, @RequestBody PostRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
 
+        User user = userService.getUserById(userDetails.getUserId());
 
         Post post = postService.getPostById(postId);
         if(!post.getUserId().equals(user.getId())){
@@ -107,8 +113,11 @@ public class PostController {
 
     //게시글 상세조회
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResponse.PostDetailResponse> getOnePost(@PathVariable Long postId, HttpSession session) {
-        User loginUser = (User) session.getAttribute("loginUser");
+    public ResponseEntity<PostResponse.PostDetailResponse> getOnePost(@PathVariable Long postId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+        User loginUser = userService.getUserById(userDetails.getUserId());
 
         Post post = postService.increaseViewCount(postId);
         PostDto postDto = PostDto.toPostDto(post);
