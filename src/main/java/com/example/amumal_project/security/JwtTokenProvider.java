@@ -17,27 +17,33 @@ import java.util.Date;
 public class JwtTokenProvider {
     private final Key key;
     private final long accessTokenExTime;
+    private final long refreshTokenExTime;
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") final String secretKey,
-            @Value("${jwt.accessTokenExTime}") final long accessTokenExTime)
+            @Value("${jwt.accessTokenExTime}") final long accessTokenExTime,
+            @Value("${jwt.refreshTokenExTime}") final long refreshTokenExTime
+    )
     {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenExTime = accessTokenExTime;
+        this.refreshTokenExTime = refreshTokenExTime;
     }
 
     //Access Token 생성
     public String createAccessToken(CustomUserinfoDto user){
         return createToken(user, accessTokenExTime);
     }
-
+    //Refresh Token 생성
+    public String createRefreshToken(CustomUserinfoDto user){
+        return createToken(user, refreshTokenExTime);
+    }
     //Jwt 생성
     private String createToken(CustomUserinfoDto user, long expireTime) {
         Claims claims = Jwts.claims();
         claims.put("userId", user.getId());
         claims.put("email", user.getEmail());
-        claims.put("nickname", user.getNickname());
 
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tokenValidity = now.plusSeconds(expireTime);
@@ -50,9 +56,14 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+
     //토큰에서 UserId 추출
     public Long getUserId(String token){
         return parseClaims(token).get("userId",Long.class);
+    }
+
+    public long getRefreshTokenExpireTime() {
+        return refreshTokenExTime;
     }
 
     //Jwt Claims 추출

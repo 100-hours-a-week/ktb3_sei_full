@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j(topic = "FORBIDDEN_EXCEPTION_HANDLER")
+@Slf4j(topic = "UNAUTHORIZED_EXCEPTION_HANDLER")
 @AllArgsConstructor
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {

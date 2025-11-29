@@ -18,12 +18,17 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final AdapterUserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> {
-                    log.error("로그인 실패: 존재하지 않은 이메일 입니다. {}", email);
-                    return new UsernameNotFoundException("존재하지 않는 사용자 입니다.");
-                });
+    public UserDetails loadUserByUsername(String value) throws UsernameNotFoundException {
+        User user;
+
+        try {
+            Long id = Long.parseLong(value);
+            user = userRepository.findById(id)
+                    .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자 입니다."));
+        } catch (NumberFormatException e) {
+            user = userRepository.findByEmail(value)
+                    .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자 입니다."));
+        }
         return new CustomUserDetails(
                 user.getId(),
                 user.getEmail(),

@@ -1,8 +1,11 @@
 package com.example.amumal_project.api.user.service;
 
+import com.example.amumal_project.api.auth.RefreshTokenRepository;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.api.user.User;
 import com.example.amumal_project.api.user.repository.UserRepository;
+import com.example.amumal_project.common.exception.UnauthorizedException;
+import com.example.amumal_project.entity.RefreshTokenEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,10 +19,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    private final RefreshTokenRepository refreshTokenRepository;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RefreshTokenRepository refreshTokenRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Transactional
@@ -102,6 +106,11 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(id);
 
         return user;
+    }
+
+    @Transactional
+    public void logout(String token){
+        refreshTokenRepository.deleteByRefreshToken(token);
     }
 
 

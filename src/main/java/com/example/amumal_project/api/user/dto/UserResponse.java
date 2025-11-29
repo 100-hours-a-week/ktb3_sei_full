@@ -18,6 +18,15 @@ public class UserResponse {
     public static class LoginResponse {
         private String message;
         private String accessToken;
+        private String refreshToken;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ReissueResponse {
+        private String message;
+        private String accessToken;
+        private String refreshToken;
     }
 
 

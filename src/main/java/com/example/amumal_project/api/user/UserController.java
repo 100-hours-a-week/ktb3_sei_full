@@ -1,6 +1,8 @@
 package com.example.amumal_project.api.user;
 
 import com.example.amumal_project.api.auth.AuthService;
+import com.example.amumal_project.api.auth.dto.AuthLoginResult;
+import com.example.amumal_project.api.auth.dto.AuthReissueResult;
 import com.example.amumal_project.api.user.dto.UserDto;
 import com.example.amumal_project.api.user.dto.UserRequest;
 import com.example.amumal_project.api.user.dto.UserResponse;
@@ -9,9 +11,14 @@ import com.example.amumal_project.common.exception.ResourceNotFoundException;
 import com.example.amumal_project.common.exception.UnauthorizedException;
 import com.example.amumal_project.api.user.service.UserService;
 import com.example.amumal_project.security.details.CustomUserDetails;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -81,11 +88,35 @@ public class UserController {
 
     //로그인
     @PostMapping("/login")
-    public ResponseEntity<UserResponse.LoginResponse> login(@RequestBody UserRequest.LoginRequest request){
-        String accessToken = authService.login(request.getEmail(), request.getPassword());
-        UserResponse.LoginResponse loginResponse = new UserResponse.LoginResponse("" +
-                "login_success",accessToken);
-        return ResponseEntity.ok(loginResponse);
+    public ResponseEntity<?> login(@RequestBody UserRequest.LoginRequest request,
+                                   HttpServletResponse response) {
+
+        AuthLoginResult tokens = authService.login(request.getEmail(), request.getPassword());
+
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", tokens.getAccessToken())
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(60 * 30)  // 30분
+                .build();
+
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", tokens.getRefreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(60 * 60 * 24 * 7)
+                .build();
+
+
+        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+
+        return ResponseEntity.ok(Map.of(
+                "message", "login_success"
+        ));
     }
 
     //전체 회원 목록 조회
@@ -177,12 +208,58 @@ public class UserController {
 
     //로그아웃
     @DeleteMapping("/session")
-    public ResponseEntity<CommonResponse> logout(HttpSession session){
-        session.invalidate();
+    public ResponseEntity<CommonResponse> logout(HttpServletRequest request,
+                                                 HttpServletResponse response){
+        String refreshToken =null;
+        if(request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if("refreshToken".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if(refreshToken == null || refreshToken.isBlank()){
+            throw new UnauthorizedException("리프레쉬 토큰이 없음");
+        }
+
+        userService.logout(refreshToken);
+
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", "")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken","")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        response.addHeader("Set-Cookie", accessCookie.toString());
+        response.addHeader("Set-Cookie", refreshCookie.toString());
         return ResponseEntity.ok(new CommonResponse("logout_success"));
+
     }
 
 
-
+    //액세스 토큰 재발급
+    @PostMapping("/reissue")
+    public ResponseEntity<UserResponse.ReissueResponse> reissue(@RequestBody Map<String, String> body){
+        String refreshToken = body.get("refresh_token");
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new UnauthorizedException("리프레쉬 토큰이 필요합니다.");
+        }
+        AuthReissueResult result = authService.reissue(refreshToken);
+        UserResponse.ReissueResponse response = new UserResponse.ReissueResponse(
+                "reissue_success",
+                result.getAccessToken(),
+                result.getRefreshToken()
+        );
+        return ResponseEntity.ok(response);
+    }
 
 }
