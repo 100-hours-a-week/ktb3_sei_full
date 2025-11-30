@@ -17,6 +17,7 @@ public class CommentDto {
     private LocalDateTime updatedAt;
     private int likeCount;
     private String nickname;
+    private String profileImageUrl;
 
     public static  CommentDto toCommentDto(Comment comment){
         return CommentDto.builder()
@@ -28,6 +29,7 @@ public class CommentDto {
                 .updatedAt(comment.getUpdated_at())
                 .likeCount(comment.getLikeCount())
                 .nickname(comment.getNickname())
+                .profileImageUrl(comment.getProfileImageUrl())
                 .build();
     }
 }

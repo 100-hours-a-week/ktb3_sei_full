@@ -7,30 +7,32 @@ public class Post {
     private Long userId;
     private String title;
     private String content;
-    private String ImageUrl;
+    private String imageUrl;
     private int likeCount;
     private int viewCount;
+    private int commentCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String nickname;
 
-    public Post(Long id, Long userId, String title, String content,String imageUrl,int view_count, int like_count, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Post(Long id, Long userId, String title, String content,String imageUrl,int view_count, int like_count,int commentCount, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
         this.title = title;
         this.viewCount = view_count;
         this.likeCount = like_count;
+        this.commentCount = commentCount;
         this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.ImageUrl = imageUrl;
+        this.imageUrl = imageUrl;
         this.nickname = nickname;
     }
 
     public Post() {}
 
-    public String getImageUrl() {return ImageUrl;}
-    public void setImageUrl(String imageUrl) {ImageUrl = imageUrl;}
+    public String getImageUrl() {return imageUrl;}
+    public void setImageUrl(String imageUrl) {imageUrl = imageUrl;}
 
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
@@ -58,4 +60,7 @@ public class Post {
 
     public String getNickname() {return nickname;}
     public void setNickname(String nickname) {this.nickname = nickname;}
+
+    public int getCommentCount() {return commentCount;}
+    public void setCommentCount(int comment_count) {this.commentCount = comment_count;}
 }

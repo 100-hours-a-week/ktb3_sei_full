@@ -34,13 +34,13 @@ public class AdapterCommentRepository implements CommentRepository {
        CommentEntity savedComment = jpaCommentRepository.save(commentEntity);
        post.setCommentCount(post.getCommentCount()+1);
        jpaPostRepository.save(post);
-       return new Comment(savedComment.getId(),savedComment.getAuthor().getId(), savedComment.getPost().getId(),savedComment.getContent(),savedComment.getCreatedAt(),savedComment.getLikeCount(),savedComment.getAuthor().getNickname());
+       return new Comment(savedComment.getId(),savedComment.getAuthor().getId(), savedComment.getPost().getId(),savedComment.getContent(),savedComment.getCreatedAt(),savedComment.getLikeCount(),savedComment.getAuthor().getNickname(),savedComment.getAuthor().getProfileImageUrl());
    };
 
    @Override
    public List<Comment> findByPostId(long postId){
        return jpaCommentRepository.findByPostIdAndIsDeletedFalseOrderByIdAsc(postId).stream()
-               .map(e -> new Comment(e.getId(),e.getAuthor().getId(),e.getPost().getId(),e.getContent(),e.getCreatedAt(),e.getLikeCount(), e.getAuthor().getNickname()))
+               .map(e -> new Comment(e.getId(),e.getAuthor().getId(),e.getPost().getId(),e.getContent(),e.getCreatedAt(),e.getLikeCount(), e.getAuthor().getNickname(),e.getAuthor().getProfileImageUrl()))
                .collect(Collectors.toList());
    };
    @Override
@@ -58,13 +58,13 @@ public class AdapterCommentRepository implements CommentRepository {
        CommentEntity commentEntity = jpaCommentRepository.findById(commentId).orElseThrow();
        commentEntity.setContent(content);
        commentEntity.setUpdatedAt(LocalDateTime.now());
-       return Optional.of(new Comment(commentEntity.getId(),commentEntity.getAuthor().getId(),commentEntity.getPost().getId(),commentEntity.getContent(),commentEntity.getCreatedAt(),commentEntity.getLikeCount(), commentEntity.getAuthor().getNickname()));
+       return Optional.of(new Comment(commentEntity.getId(),commentEntity.getAuthor().getId(),commentEntity.getPost().getId(),commentEntity.getContent(),commentEntity.getCreatedAt(),commentEntity.getLikeCount(), commentEntity.getAuthor().getNickname(),commentEntity.getAuthor().getProfileImageUrl()));
    };
 
     @Override
    public Optional<Comment> findById(Long id){
         return jpaCommentRepository.findById(id)
-                .map(e -> new Comment(e.getId(),e.getAuthor().getId(),e.getPost().getId(),e.getContent(),e.getCreatedAt(),e.getLikeCount(),e.getAuthor().getNickname()));
+                .map(e -> new Comment(e.getId(),e.getAuthor().getId(),e.getPost().getId(),e.getContent(),e.getCreatedAt(),e.getLikeCount(),e.getAuthor().getNickname(),e.getAuthor().getProfileImageUrl()));
     }
 
 }

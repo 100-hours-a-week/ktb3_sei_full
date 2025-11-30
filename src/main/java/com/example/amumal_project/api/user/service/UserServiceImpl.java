@@ -95,8 +95,8 @@ public class UserServiceImpl implements UserService {
         if(newPassword == null  || newPassword.isBlank()) {
             throw new IllegalArgumentException("새 비밀번호를 입력해주세요!");
         }
-
-        userRepository.setPassword(user.getId(), newPassword);
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        userRepository.setPassword(user.getId(), encodedPassword);
         return user;
     }
     @Transactional

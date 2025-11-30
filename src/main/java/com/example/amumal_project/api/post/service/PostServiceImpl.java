@@ -2,6 +2,7 @@ package com.example.amumal_project.api.post.service;
 
 import com.example.amumal_project.api.post.dto.PostDto;
 import com.example.amumal_project.api.post.dto.PostResponse;
+import com.example.amumal_project.api.user.User;
 import com.example.amumal_project.api.user.repository.JpaUserRepository;
 import com.example.amumal_project.common.exception.AccessDeniedException;
 import com.example.amumal_project.common.exception.ResourceNotFoundException;
@@ -41,7 +42,7 @@ public class PostServiceImpl implements PostService {
         String nickname = jpaUserRepository.findById(userId).get().getNickname();
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime updatedAt = LocalDateTime.now();
-        Post post = new Post(null, userId, title,content,imageUrl,0,0, nickname,createdAt, updatedAt);
+        Post post = new Post(null, userId, title,content,imageUrl,0,0, 0,nickname,createdAt, updatedAt);
         return postRepository.save(post);
     }
 
@@ -64,13 +65,16 @@ public class PostServiceImpl implements PostService {
                 .map(post -> PostDto.builder()
                         .id(post.getId())
                         .title(post.getTitle())
+                        .content(post.getContent())
                         .nickname(post.getNickname())
                         .imageUrl(post.getImageUrl())
                         .viewCount(post.getViewCount())
                         .likeCount(post.getLikeCount())
+                        .commentCount(post.getCommentCount())
                         .createdAt(post.getCreatedAt())
                         .updatedAt(post.getUpdatedAt())
-                        .nickname(post.getNickname())
+                        .profileImageUrl(jpaUserRepository.findById(post.getUserId()).map(userEntity -> userEntity.getProfileImageUrl())
+                        .orElse(null))
                         .build()
                 )
                 .toList();

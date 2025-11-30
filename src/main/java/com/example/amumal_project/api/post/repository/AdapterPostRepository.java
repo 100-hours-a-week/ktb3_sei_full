@@ -28,12 +28,12 @@ public class AdapterPostRepository implements PostRepository {
         UserEntity author = jpaUserRepository.findById(post.getUserId()).orElseThrow();
         PostEntity postEntity  = new PostEntity(author, post.getTitle(),post.getContent(),post.getImageUrl());
         PostEntity savedPost  = jpaPostRepository.save(postEntity);
-        return new Post(savedPost.getId(), postEntity.getAuthor().getId(), postEntity.getTitle(),postEntity.getContent(),postEntity.getImageUrl(),postEntity.getViewCount(),postEntity.getLikeCount(), postEntity.getAuthor().getNickname(), savedPost.getCreatedAt(), savedPost.getUpdatedAt());
+        return new Post(savedPost.getId(), postEntity.getAuthor().getId(), postEntity.getTitle(),postEntity.getContent(),postEntity.getImageUrl(),postEntity.getViewCount(),postEntity.getLikeCount(),postEntity.getCommentCount(), postEntity.getAuthor().getNickname(), savedPost.getCreatedAt(), savedPost.getUpdatedAt());
     };
     @Override
     public Optional<Post> findById(Long id){
         return jpaPostRepository.findById(id)
-                .map(e -> new Post( e.getId(), e.getAuthor().getId(),e.getTitle(), e.getContent(),e.getImageUrl(),e.getViewCount(),e.getLikeCount(), e.getAuthor().getNickname(), e.getCreatedAt(), e.getUpdatedAt()));
+                .map(e -> new Post( e.getId(), e.getAuthor().getId(),e.getTitle(), e.getContent(),e.getImageUrl(),e.getViewCount(),e.getLikeCount(), e.getCommentCount(),e.getAuthor().getNickname(), e.getCreatedAt(), e.getUpdatedAt()));
     };
 
     @Override
@@ -48,6 +48,7 @@ public class AdapterPostRepository implements PostRepository {
                 e.getImageUrl(),
                 e.getViewCount(),
                 e.getLikeCount(),
+                e.getCommentCount(),
                 e.getAuthor().getNickname(),
                 e.getCreatedAt(),
                 e.getUpdatedAt()
@@ -68,7 +69,7 @@ public class AdapterPostRepository implements PostRepository {
         postEntity.setContent(content);
         postEntity.setImageUrl(imageUrl);
         postEntity.setUpdatedAt(LocalDateTime.now());
-        return Optional.of(new Post(postEntity.getId(),postEntity.getAuthor().getId(),postEntity.getTitle(),postEntity.getContent(), postEntity.getImageUrl(),postEntity.getViewCount(),postEntity.getLikeCount(), postEntity.getAuthor().getNickname() , postEntity.getCreatedAt(), postEntity.getUpdatedAt()));
+        return Optional.of(new Post(postEntity.getId(),postEntity.getAuthor().getId(),postEntity.getTitle(),postEntity.getContent(), postEntity.getImageUrl(),postEntity.getViewCount(),postEntity.getLikeCount(),postEntity.getCommentCount(), postEntity.getAuthor().getNickname() , postEntity.getCreatedAt(), postEntity.getUpdatedAt()));
     };
     @Override
     public void updateViewCount(Long id){

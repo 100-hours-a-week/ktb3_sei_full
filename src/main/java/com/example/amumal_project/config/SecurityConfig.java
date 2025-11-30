@@ -84,7 +84,7 @@ public class SecurityConfig {
 
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Set-Cookie"));
 

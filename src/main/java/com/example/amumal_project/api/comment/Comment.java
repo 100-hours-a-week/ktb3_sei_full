@@ -11,10 +11,11 @@ public class Comment {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
     private String nickname;
+    private String profileImageUrl;
 
     public Comment() {}
 
-    public Comment(Long id, Long userId, Long postId, String content,LocalDateTime created_at,int likeCount, String nickname) {
+    public Comment(Long id, Long userId, Long postId, String content,LocalDateTime created_at,int likeCount, String nickname,String profileImageUrl) {
         this.userId = userId;
         this.postId = postId;
         this.id = id;
@@ -23,6 +24,8 @@ public class Comment {
         this.created_at = LocalDateTime.now();
         this.updated_at = LocalDateTime.now();
         this.nickname = nickname;
+        this.profileImageUrl = profileImageUrl;
+
     }
 
     public Long getId() {return id;}
@@ -48,4 +51,7 @@ public class Comment {
 
     public String getNickname() {return nickname;}
     public void setNickname(String nickname) {this.nickname = nickname;}
+
+    public String getProfileImageUrl() {return profileImageUrl;}
+    public void setProfileImageUrl(String profileImageUrl) {this.profileImageUrl = profileImageUrl;}
 }

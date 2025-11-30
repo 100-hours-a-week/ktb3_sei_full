@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
             throw new IllegalArgumentException("댓글 내용을 입력해주세요!");
         }
         String nickname = jpaUserRepository.findById(userId).get().getNickname();
-        Comment comment = new Comment(null,userId,postId, content,null,0,nickname);
+        Comment comment = new Comment(null,userId,postId, content,null,0,nickname,null);
         return commentRepository.save(comment);
     }
 

@@ -1,6 +1,10 @@
 package com.example.amumal_project.api.post.dto;
 
 import com.example.amumal_project.api.post.Post;
+import com.example.amumal_project.api.post.repository.JpaPostRepository;
+import com.example.amumal_project.api.user.User;
+import com.example.amumal_project.api.user.repository.AdapterUserRepository;
+import com.example.amumal_project.api.user.repository.JpaUserRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,9 +22,11 @@ public class PostDto {
     private String imageUrl;
     private int likeCount;
     private int viewCount;
+    private int commentCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String nickname;
+    private String profileImageUrl;
 
     public static PostDto toPostDto(Post post) {
         return PostDto.builder()
@@ -31,6 +37,7 @@ public class PostDto {
                 .imageUrl(post.getImageUrl())
                 .viewCount(post.getViewCount())
                 .likeCount(post.getLikeCount())
+                .commentCount(post.getCommentCount())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();
