@@ -9,7 +9,7 @@ shhh..(쉿)은 오늘 하루 있었던 일을 공유할 수 있는 **비밀 일�
 혼자만의 고민을 공유하고 위로와 공감을 얻을 수 있어요.
 
 ##### 메인 로고
-<img src="[이미지_URL](https://github.com/100-hours-a-week/ktb3_sei_full/blob/main/shhh..%20%E1%84%85%E1%85%A9%E1%84%80%E1%85%A9.png?raw=true)" width="300px" />
+![image alt](https://github.com/100-hours-a-week/ktb3_sei_full/blob/main/shhh..%20%E1%84%85%E1%85%A9%E1%84%80%E1%85%A9.png?raw=true)
 
 
 
