@@ -8,7 +8,7 @@ shhh..(쉿)은 오늘 하루 있었던 일을 공유할 수 있는 **비밀 일�
 부끄러운 실수,   
 혼자만의 고민을 공유하고 위로와 공감을 얻을 수 있어요.
 
-##### 메인 로고
+### 메인 로고
 <img src="https://github.com/100-hours-a-week/ktb3_sei_full/blob/main/shhh..%20%E1%84%85%E1%85%A9%E1%84%80%E1%85%A9.png?raw=true" width="250">
 
 
@@ -32,8 +32,9 @@ shhh..(쉿)은 오늘 하루 있었던 일을 공유할 수 있는 **비밀 일�
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white">
 
 # 동작영상
+미리보기
 <img src="https://raw.githubusercontent.com/100-hours-a-week/ktb3_sei_full/54be20a3921e71841e4c3121c0945fc968fa9c52/gif%E1%84%8B%E1%85%AD%E1%86%BC%20%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC%20(1).gif" width="300">
 
 
-[영상 보기](https://youtu.be/Z9cua9ks8SY)
+[전체 영상 보기](https://youtu.be/Z9cua9ks8SY)
 
