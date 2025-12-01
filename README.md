@@ -41,5 +41,5 @@ shhh..(쉿)은 오늘 하루 있었던 일을 공유할 수 있는 **비밀 일�
 <img src="https://raw.githubusercontent.com/100-hours-a-week/ktb3_sei_full/54be20a3921e71841e4c3121c0945fc968fa9c52/gif%E1%84%8B%E1%85%AD%E1%86%BC%20%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC%20(1).gif" width="300">
 
 ### 영상 링크
-[전체 영상 보기](https://youtu.be/Z9cua9ks8SY)
+[전체 영상 보기](https://youtu.be/CNW5rryhXts)
 
