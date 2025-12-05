@@ -68,7 +68,7 @@ public class AdapterCommentRepository implements CommentRepository {
     }
     @Override
     public Optional<Comment> findByPostIdAndCommentId(long postId, long commentId){
-        CommentEntity commentEntity = jpaCommentRepository.findByPostIdAndIsDeletedFalseAndCommentId(postId,commentId);
+        CommentEntity commentEntity = jpaCommentRepository.findByPostIdAndIsDeletedFalseAndId(postId,commentId);
         return Optional.of(new Comment(commentEntity.getId(),commentEntity.getAuthor().getId(),commentEntity.getPost().getId(),commentEntity.getContent(),commentEntity.getCreatedAt(),commentEntity.getLikeCount(), commentEntity.getAuthor().getNickname(),commentEntity.getAuthor().getProfileImageUrl()));
     }
 
