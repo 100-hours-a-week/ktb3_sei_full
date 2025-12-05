@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface JpaCommentRepository extends JpaRepository<CommentEntity, Long> {
     List<CommentEntity> findByPostId(long postId);
     List<CommentEntity> findByPostIdAndIsDeletedFalseOrderByIdAsc(Long postId);
-
+    CommentEntity findByPostIdAndIsDeletedFalseAndCommentId(long postId, long commentId);
 }

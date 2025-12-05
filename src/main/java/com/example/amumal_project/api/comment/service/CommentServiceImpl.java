@@ -48,13 +48,7 @@ public class CommentServiceImpl implements CommentService {
     }
     @Transactional
     public void deleteComment(Long postId, Long commentId, Long userId) {
-        List<Comment> comments = commentRepository.findByPostId(postId);
-        if(comments.isEmpty()) {
-            throw new ResourceNotFoundException("댓글을 찾을 수 없습니다.");
-        }
-        Comment comment = comments.stream()
-                .filter(c -> c.getId().equals(commentId))
-                .findFirst()
+        Comment comment = commentRepository.findByPostIdAndCommentId(postId,commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("댓글을 찾을 수 없습니다."));
 
         if(!comment.getUserId().equals(userId)) {
@@ -67,13 +61,7 @@ public class CommentServiceImpl implements CommentService {
         if(content == null || content.isBlank()) {
             throw new IllegalArgumentException("댓글 내용을 입력해주세요!");
         }
-        List<Comment> comments = commentRepository.findByPostId(postId);
-        if(comments.isEmpty()) {
-            throw new ResourceNotFoundException("댓글을 찾을 수 없습니다.");
-        }
-        Comment comment = comments.stream()
-                .filter(c -> c.getId().equals(commentId))
-                .findFirst()
+        Comment comment = commentRepository.findByPostIdAndCommentId(postId,commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("댓글을 찾을 수 없습니다."));
 
         if(!comment.getUserId().equals(userId)) {

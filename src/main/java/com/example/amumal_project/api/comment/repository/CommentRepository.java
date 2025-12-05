@@ -11,4 +11,5 @@ public interface CommentRepository {
     void delete(Long postId,Long commentId);
     Optional<Comment> update(Long postId, Long commentId, String content);
     Optional<Comment> findById(Long commentId);
+    Optional<Comment> findByPostIdAndCommentId(long postId, long commentId);
 }
