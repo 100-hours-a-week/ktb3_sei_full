@@ -1,4 +1,4 @@
-package com.example.amumal_project.api.user;
+package com.example.amumal_project.unit.api.user;
 
 import com.example.amumal_project.api.auth.AuthService;
 import com.example.amumal_project.api.auth.dto.AuthLoginResult;

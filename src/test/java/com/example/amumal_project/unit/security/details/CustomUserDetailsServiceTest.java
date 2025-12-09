@@ -1,4 +1,4 @@
-package com.example.amumal_project.security.details;
+package com.example.amumal_project.unit.security.details;
 
 import com.example.amumal_project.api.user.User;
 import com.example.amumal_project.api.user.repository.AdapterUserRepository;

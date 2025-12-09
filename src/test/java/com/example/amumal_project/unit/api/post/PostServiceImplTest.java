@@ -1,4 +1,4 @@
-package com.example.amumal_project.api.post;
+package com.example.amumal_project.unit.api.post;
 
 import com.example.amumal_project.api.post.dto.PostDto;
 import com.example.amumal_project.api.post.repository.PostRepository;

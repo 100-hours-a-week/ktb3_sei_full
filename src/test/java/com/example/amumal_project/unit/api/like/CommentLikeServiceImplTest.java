@@ -1,4 +1,4 @@
-package com.example.amumal_project.api.like;
+package com.example.amumal_project.unit.api.like;
 
 import com.example.amumal_project.api.comment.repository.CommentRepository;
 import com.example.amumal_project.api.like.repository.commentLike.CommentLikeRepository;

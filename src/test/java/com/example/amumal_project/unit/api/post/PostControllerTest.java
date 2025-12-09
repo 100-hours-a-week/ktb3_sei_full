@@ -1,4 +1,4 @@
-package com.example.amumal_project.api.post;
+package com.example.amumal_project.unit.api.post;
 
 import com.example.amumal_project.api.auth.dto.AuthLoginResult;
 import com.example.amumal_project.api.comment.Comment;

@@ -1,4 +1,4 @@
-package com.example.amumal_project.security;
+package com.example.amumal_project.unit.security;
 
 import com.example.amumal_project.api.user.dto.CustomUserinfoDto;
 import io.jsonwebtoken.Claims;

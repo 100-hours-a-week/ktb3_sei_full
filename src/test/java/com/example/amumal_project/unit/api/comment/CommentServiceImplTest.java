@@ -1,4 +1,4 @@
-package com.example.amumal_project.api.comment;
+package com.example.amumal_project.unit.api.comment;
 
 import com.example.amumal_project.api.comment.repository.CommentRepository;
 import com.example.amumal_project.api.comment.service.CommentServiceImpl;
