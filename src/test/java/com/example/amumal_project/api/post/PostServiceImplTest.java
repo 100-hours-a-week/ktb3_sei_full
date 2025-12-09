@@ -1,5 +1,6 @@
 package com.example.amumal_project.api.post;
 
+import com.example.amumal_project.api.post.dto.PostDto;
 import com.example.amumal_project.api.post.repository.PostRepository;
 import com.example.amumal_project.api.post.service.PostServiceImpl;
 import com.example.amumal_project.api.user.User;
@@ -19,9 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
@@ -77,20 +76,42 @@ public class PostServiceImplTest {
     @Test
     void 게시물목록_조회_성공(){
         //given
-         //when
-        //then
+        UserEntity user = new UserEntity("aaa@gmail.com","password","aaa","image/profile_image.png");
+        int size = 10;
+        int page = 1;
+        String sort = "created_at,desc";
+        Post post = new Post(101L,1L,"tile","content","/images/post.png",0,0,0,"author_nickname",
+                LocalDateTime.of(2025, 12, 4, 15, 23, 10),LocalDateTime.of(2025, 12, 4, 15, 23, 10));
+        List<Post> posts = List.of(post);
+        Page<Post> postPage = new PageImpl<>(posts);
+        PostDto postDto = PostDto.toPostDto(post);
+        List<PostDto> dtoList = List.of(postDto);
 
-    }
+        given(jpaUserRepository.findById(1L)).willReturn(Optional.of(user));
+        given(postRepository.findAll(Mockito.any(Pageable.class))).willReturn(postPage);
 
-    @Test
-    void 게시물목록_조회_실패(){
-        //given
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("page", page);
+        map.put("size", size);
+        map.put("totalPages", postPage.getTotalPages());
+        map.put("totalPosts", postPage.getTotalElements());
+        map.put("sort",sort);
+        map.put("posts", dtoList);
 
         //when
-
+        Map<String, Object> result = postServiceImpl.getPagedPosts(1,10,"created_at,desc");
         //then
+        assertThat(result.get("page")).isEqualTo(page);
+        assertThat(result.get("size")).isEqualTo(size);
+        assertThat(result.get("totalPages")).isEqualTo(postPage.getTotalPages());
+        assertThat(result.get("totalPosts")).isEqualTo(postPage.getTotalElements());
+        assertThat(result.get("sort")).isEqualTo(sort);
 
+        assertThat(result.get("posts")).isInstanceOf(List.class);
+        assertThat(((List<?>)result.get("posts"))).hasSize(1);
     }
+
 
     @Test
     void 아이디로게시글조회_성공(){

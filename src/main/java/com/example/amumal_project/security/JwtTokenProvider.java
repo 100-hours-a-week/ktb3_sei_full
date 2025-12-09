@@ -91,6 +91,8 @@ public class JwtTokenProvider {
             log.info("Unsupported token", e);
         }catch(IllegalArgumentException e){
             log.info("Jwt claims string is empty", e);
+        }catch(SignatureException e){
+            log.info("Signature invalid", e);
         }
         return false;
     }
